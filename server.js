@@ -12,15 +12,15 @@ const app = express();
 
 // ✅ Cloudinary কনফিগারেশন (সবচেয়ে গুরুত্বপূর্ণ স্টেপ)
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'ddtfpqimk',
-  api_key: process.env.CLOUDINARY_API_KEY || '282223626248792',
-  api_secret: process.env.CLOUDINARY_API_SECRET || 'aNctuQ6beENYHi8qSEASLpgVnVs',
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dorpsn4nf',
+  api_key: process.env.CLOUDINARY_API_KEY || '185325533762674',
+  api_secret: process.env.CLOUDINARY_API_SECRET || 'Z6Dk5ZgVpFVXHlXFPli8MhmLMyg',
   secure: true
 });
 
 // Middleware
 app.use(cors({
-  origin: ['https://superb-caramel-71d6e8.netlify.app', 'https://stupendous-griffin-263069.netlify.app', 'http://localhost:3000'],
+  origin: ['https://hilarious-rolypoly-c0d8ff.netlify.app', 'https://fancy-hamster-878a22.netlify.app', 'http://localhost:3000'],
   credentials: true
 }));
 app.use(express.json({ limit: '50mb' }));
@@ -41,7 +41,7 @@ if (!fs.existsSync(uploadsDir)) {
 app.use('/uploads', express.static(uploadsDir));
 
 // MongoDB Connection
-const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://billaharif661_db_user:2GCmDhaEOQUteXow@iwonttotast0.mza6qgz.mongodb.net/ROYAL_TRUST_BD?retryWrites=true&w=majority';
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://jahirkhanlavaa_db_user:F08lxNuvuuJTnVwK@cluster0.w1uufvt.mongodb.net/RoyalTrustBD?appName=Cluster0';
 
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
@@ -152,7 +152,7 @@ function generateOrderId() {
 const transporter = nodemailer.createTransport({
   service: 'gmail',
   auth: {
-    user: process.env.EMAIL_USER || 'billaharif661@gmail.com',
+    user: process.env.EMAIL_USER || 'jahirkhan.lavaa@gmail.com',
     pass: process.env.EMAIL_PASS
   }
 });
@@ -161,8 +161,8 @@ const transporter = nodemailer.createTransport({
 async function sendEmailNotification(subject, message) {
   try {
     const mailOptions = {
-      from: process.env.EMAIL_USER || 'billaharif661@gmail.com',
-      to: 'billaharif661@gmail.com',
+      from: process.env.EMAIL_USER || 'jahirkhan.lavaa@gmail.com',
+      to: 'jahirkhan.lavaa@gmail.com',
       subject: subject,
       html: message
     };
