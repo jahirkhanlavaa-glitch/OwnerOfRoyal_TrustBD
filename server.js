@@ -4,84 +4,93 @@ const cors = require('cors');
 const fileUpload = require('express-fileupload');
 const path = require('path');
 const fs = require('fs');
+const nodemailer = require('nodemailer');
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 
 const app = express();
 
 // ============================================
-// CLOUDINARY CONFIGURATION
+// ✅ Cloudinary Configuration
 // ============================================
 cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET,
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME || 'dorpsn4nf',
+  api_key: process.env.CLOUDINARY_API_KEY || '185325533762674',
+  api_secret: process.env.CLOUDINARY_API_SECRET || 'Z6Dk5ZgVpFVXHlXFPli8MhmLMyg',
   secure: true
 });
 
 // ============================================
-// MIDDLEWARE
+// ✅ Middleware Configuration
 // ============================================
 app.use(cors({
-  origin: ['http://localhost:3000', 'http://localhost:5000', 'https://hilarious-rolypoly-c0d8ff.netlify.app'],
+  origin: [
+    'https://hilarious-rolypoly-c0d8ff.netlify.app',  // Frontend
+    'https://fancy-hamster-878a22.netlify.app',      // Admin Panel
+    'http://localhost:3000',
+    'http://localhost:5000'
+  ],
   credentials: true
 }));
+
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 app.use(fileUpload({
   limits: { fileSize: 50 * 1024 * 1024 },
   useTempFiles: true,
-  tempFileDir: '/tmp/',
-  createParentPath: true
+  tempFileDir: '/tmp/'
 }));
 
-// Static files
-app.use(express.static(path.join(__dirname, 'public')));
-app.use('/admin', express.static(path.join(__dirname, 'admin')));
+// Create uploads directory for local fallback
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+app.use('/uploads', express.static(uploadsDir));
 
 // ============================================
-// MONGODB CONNECTION
+// ✅ MongoDB Connection
 // ============================================
-const MONGODB_URI = process.env.MONGODB_URI;
+const MONGODB_URI = process.env.MONGODB_URI || 'mongodb+srv://jahirkhanlavaa_db_user:F08lxNuvuuJTnVwK@cluster0.w1uufvt.mongodb.net/RoyalTrustBD?appName=Cluster0';
 
 mongoose.connect(MONGODB_URI, {
   useNewUrlParser: true,
-  useUnifiedTopology: true,
-  serverSelectionTimeoutMS: 5000
+  useUnifiedTopology: true
 })
 .then(() => console.log('✅ MongoDB Connected Successfully!'))
-.catch(err => {
-  console.error('❌ MongoDB Connection Error:', err.message);
-  process.exit(1);
-});
+.catch(err => console.error('❌ MongoDB Connection Error:', err));
 
 // ============================================
-// DATABASE SCHEMAS
+// ✅ Database Schemas
 // ============================================
 
+// Product Schema
 const productSchema = new mongoose.Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
+  category: { 
+    type: String, 
+    required: true,
+    enum: ['panjabi', 'tshirt', 'three-piece', 'fitness', 'others'],
+    default: 'others'
+  },
   colors: [{
     name: String,
     code: String,
-    image: String
+    image: String,
+    isBase64: { type: Boolean, default: false }
   }],
   size: { type: String, required: true },
   regularPrice: { type: Number, required: true },
   offerPrice: { type: Number, required: true },
   offerPercentage: { type: Number, required: true },
-  isActive: { type: Boolean, default: true },
-  category: { 
-    type: String, 
-    enum: ['panjabi', 'tshirt', 'three-piece', 'fitness'],
-    default: 'panjabi'
-  },
-  features: [String],
+  features: [String], // For fitness products
   hasVariants: { type: Boolean, default: true },
+  isActive: { type: Boolean, default: true },
   createdAt: { type: Date, default: Date.now }
 });
 
+// Order Schema
 const orderSchema = new mongoose.Schema({
   orderId: { type: String, required: true, unique: true },
   customerName: { type: String, required: true },
@@ -89,21 +98,22 @@ const orderSchema = new mongoose.Schema({
   address: { type: String, required: true },
   productId: { type: mongoose.Schema.Types.ObjectId, ref: 'Product' },
   productName: { type: String, required: true },
-  productCategory: String,
+  productCategory: { type: String },
   color: { type: String, required: true },
   size: { type: String, required: true },
-  quantity: { type: Number, required: true, default: 1 },
+  quantity: { type: Number, required: true },
   totalPrice: { type: Number, required: true },
   status: { 
     type: String, 
     enum: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled'],
     default: 'pending'
   },
-  notes: String,
+  notes: { type: String },
   isRead: { type: Boolean, default: false },
   createdAt: { type: Date, default: Date.now }
 });
 
+// Review Schema
 const reviewSchema = new mongoose.Schema({
   name: { type: String, required: true },
   location: { type: String, required: true },
@@ -114,23 +124,26 @@ const reviewSchema = new mongoose.Schema({
   createdAt: { type: Date, default: Date.now }
 });
 
+// Slider Schema
 const sliderSchema = new mongoose.Schema({
   slideNumber: { type: Number, required: true, unique: true },
   title: { type: String, required: true },
   subtitle: { type: String, required: true },
   description: { type: String, required: true },
   imageUrl: { type: String, required: true },
-  badgeText: String,
+  isBase64: { type: Boolean, default: false },
+  badgeText: { type: String },
   badgeColor: { 
     type: String, 
-    enum: ['red', 'blue', 'green', 'yellow', 'purple'],
+    enum: ['red', 'blue', 'green', 'yellow', 'purple', 'amber'],
     default: 'red'
   },
-  price: Number,
-  originalPrice: Number,
+  price: { type: Number },
+  originalPrice: { type: Number },
   isActive: { type: Boolean, default: true }
 });
 
+// Website Settings Schema
 const websiteSettingsSchema = new mongoose.Schema({
   whatsappNumber: { type: String, default: '01911465879' },
   phoneNumber: { type: String, default: '01911465879' },
@@ -143,14 +156,16 @@ const websiteSettingsSchema = new mongoose.Schema({
   updatedAt: { type: Date, default: Date.now }
 });
 
+// Admin Schema
 const adminSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
   password: { type: String, required: true },
-  lastLogin: Date,
-  createdAt: { type: Date, default: Date.now }
+  lastLogin: { type: Date }
 });
 
-// Models
+// ============================================
+// ✅ Database Models
+// ============================================
 const Product = mongoose.model('Product', productSchema);
 const Order = mongoose.model('Order', orderSchema);
 const Review = mongoose.model('Review', reviewSchema);
@@ -159,7 +174,7 @@ const WebsiteSettings = mongoose.model('WebsiteSettings', websiteSettingsSchema)
 const Admin = mongoose.model('Admin', adminSchema);
 
 // ============================================
-// HELPER FUNCTIONS
+// ✅ Helper Functions
 // ============================================
 
 // Generate unique order ID
@@ -169,92 +184,150 @@ function generateOrderId() {
   return `RT${timestamp}${random}`;
 }
 
-// Upload image to Cloudinary
-async function uploadToCloudinary(file, folder = 'products') {
+// Email configuration
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER || 'jahirkhan.lavaa@gmail.com',
+    pass: process.env.EMAIL_PASS || 'wwpr rhhi eclw vmvm'
+  }
+});
+
+// Send email notification (async)
+async function sendEmailNotification(subject, message) {
   try {
-    if (!file) return null;
-    
-    let result;
-    
-    if (typeof file === 'string' && file.startsWith('data:image')) {
-      // Base64 string
-      result = await cloudinary.uploader.upload(file, {
-        folder: `royal_trust/${folder}`,
-        resource_type: 'auto',
-        transformation: [
-          { width: 1200, height: 800, crop: 'limit' },
-          { quality: 'auto:good' }
-        ]
-      });
-    } else if (file.data) {
-      // File object from express-fileupload
-      const base64 = `data:${file.mimetype};base64,${file.data.toString('base64')}`;
-      result = await cloudinary.uploader.upload(base64, {
-        folder: `royal_trust/${folder}`,
-        resource_type: 'auto'
-      });
-    } else if (file.tempFilePath) {
-      // Temp file
-      result = await cloudinary.uploader.upload(file.tempFilePath, {
-        folder: `royal_trust/${folder}`,
-        resource_type: 'auto'
-      });
-    } else {
-      return null;
-    }
-    
-    return result.secure_url;
+    const mailOptions = {
+      from: process.env.EMAIL_USER || 'jahirkhan.lavaa@gmail.com',
+      to: 'jahirkhan.lavaa@gmail.com',
+      subject: subject,
+      html: message
+    };
+
+    transporter.sendMail(mailOptions, (error, info) => {
+      if (error) {
+        console.error('❌ Email sending failed:', error);
+      } else {
+        console.log('✅ Email notification sent:', info.messageId);
+      }
+    });
   } catch (error) {
-    console.error('❌ Cloudinary upload error:', error.message);
-    return null;
+    console.error('❌ Email setup error:', error);
   }
 }
 
+// Upload Base64 to Cloudinary
+const uploadBase64ToCloudinary = async (base64String, folder = 'products') => {
+  try {
+    console.log(`📤 Cloudinary - ${folder} ফোল্ডারে আপলোড শুরু...`);
+    
+    const result = await cloudinary.uploader.upload(base64String, {
+      folder: `royal_trust/${folder}`,
+      resource_type: 'auto',
+      timeout: 60000,
+      transformation: [
+        { width: 1200, height: 800, crop: "limit" },
+        { quality: "auto:good" }
+      ]
+    });
+    
+    console.log(`✅ Cloudinary আপলোড সফল: ${result.secure_url.substring(0, 60)}...`);
+    return result.secure_url;
+    
+  } catch (error) {
+    console.error('❌ Cloudinary আপলোড ত্রুটি:', error.message);
+    
+    // Fallback: Save locally
+    try {
+      console.log('🔄 Local ফাইল সিস্টেমে সেভ করার চেষ্টা...');
+      const base64Data = base64String.replace(/^data:image\/\w+;base64,/, '');
+      const buffer = Buffer.from(base64Data, 'base64');
+      
+      const filename = `${folder}_${Date.now()}_${Math.random().toString(36).substr(2, 9)}.png`;
+      const filepath = path.join(uploadsDir, filename);
+      
+      fs.writeFileSync(filepath, buffer);
+      console.log(`✅ Local ফাইল সেভ হয়েছে: ${filepath}`);
+      
+      return `/uploads/${filename}`;
+    } catch (fallbackError) {
+      console.error('❌ Fallback ত্রুটি:', fallbackError.message);
+      
+      // Default images
+      if (folder.includes('slider')) {
+        return 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80';
+      } else {
+        return 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
+      }
+    }
+  }
+};
+
+// Save uploaded file to Cloudinary
+const saveUploadedFile = async (file, folder = 'products') => {
+  try {
+    const base64String = `data:${file.mimetype};base64,${file.data.toString('base64')}`;
+    return await uploadBase64ToCloudinary(base64String, folder);
+  } catch (error) {
+    console.error('Error saving uploaded file:', error);
+    return null;
+  }
+};
+
 // ============================================
-// TEST ENDPOINTS
+// ✅ Basic Routes & Health Check
 // ============================================
 
 app.get('/', (req, res) => {
-  res.json({
+  res.json({ 
     status: 'OK',
     message: 'Royal Trust BD API is running',
     version: '1.0.0',
-    endpoints: {
-      frontend: 'https://hilarious-rolypoly-c0d8ff.netlify.app',
-      admin: '/admin',
-      api: '/api'
-    }
-  });
-});
-
-app.get('/health', async (req, res) => {
-  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
-  
-  let cloudinaryStatus = 'not configured';
-  try {
-    if (process.env.CLOUDINARY_CLOUD_NAME) {
-      await cloudinary.api.ping();
-      cloudinaryStatus = 'connected';
-    }
-  } catch (error) {
-    cloudinaryStatus = 'error';
-  }
-  
-  res.json({
-    status: 'OK',
     timestamp: new Date().toISOString(),
-    uptime: process.uptime(),
-    database: dbStatus,
-    cloudinary: cloudinaryStatus,
-    environment: process.env.NODE_ENV || 'development'
+    endpoints: {
+      frontend: '/api/frontend/*',
+      admin: '/api/admin/*',
+      health: '/health'
+    }
   });
 });
 
+app.get('/health', (req, res) => {
+  const dbStatus = mongoose.connection.readyState === 1 ? 'connected' : 'disconnected';
+  res.json({ 
+    status: 'OK',
+    database: dbStatus,
+    uptime: process.uptime(),
+    memory: process.memoryUsage(),
+    cloudinary: process.env.CLOUDINARY_CLOUD_NAME ? 'configured' : 'not configured'
+  });
+});
+
+// Test Cloudinary Connection
+app.get('/api/test-cloudinary', async (req, res) => {
+  try {
+    const testImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+    const result = await cloudinary.uploader.upload(testImage, { folder: 'test' });
+    
+    res.json({
+      success: true,
+      message: '✅ Cloudinary কাজ করছে!',
+      cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+      url: result.secure_url
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: '❌ Cloudinary ত্রুটি',
+      message: error.message
+    });
+  }
+});
+
 // ============================================
-// PUBLIC API ENDPOINTS (Frontend)
+// ✅ FRONTEND API - Public Routes
 // ============================================
 
-// Get all active products
+// ---------- Products ----------
 app.get('/api/frontend/products', async (req, res) => {
   try {
     const products = await Product.find({ isActive: true }).sort({ createdAt: -1 });
@@ -264,7 +337,91 @@ app.get('/api/frontend/products', async (req, res) => {
   }
 });
 
-// Get approved reviews
+// ---------- Orders ----------
+app.post('/api/frontend/order', async (req, res) => {
+  try {
+    const orderData = req.body;
+    orderData.orderId = generateOrderId();
+    
+    const order = new Order(orderData);
+    await order.save();
+    
+    // Send email notification (non-blocking)
+    const emailSubject = `🆕 New Order Received - ${order.orderId}`;
+    const emailMessage = `
+      <div style="font-family: Arial, sans-serif; padding: 20px; max-width: 600px;">
+        <h2 style="color: #dc2626;">🆕 New Order Received</h2>
+        <div style="background: #f3f4f6; padding: 20px; border-radius: 10px;">
+          <p><strong>Order ID:</strong> ${order.orderId}</p>
+          <p><strong>Customer Name:</strong> ${order.customerName}</p>
+          <p><strong>Phone:</strong> ${order.phone}</p>
+          <p><strong>Product:</strong> ${order.productName}</p>
+          <p><strong>Color:</strong> ${order.color}</p>
+          <p><strong>Size:</strong> ${order.size}</p>
+          <p><strong>Quantity:</strong> ${order.quantity}</p>
+          <p><strong>Total Price:</strong> ${order.totalPrice} টাকা</p>
+          <p><strong>Address:</strong> ${order.address}</p>
+          <p><strong>Order Time:</strong> ${new Date(order.createdAt).toLocaleString()}</p>
+        </div>
+        <br>
+        <a href="${process.env.ADMIN_URL || 'https://fancy-hamster-878a22.netlify.app'}" 
+           style="background: #dc2626; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
+          Login to Admin Panel
+        </a>
+      </div>
+    `;
+    
+    sendEmailNotification(emailSubject, emailMessage).catch(console.error);
+    
+    res.json({ 
+      success: true, 
+      message: 'Order placed successfully',
+      orderId: order.orderId 
+    });
+  } catch (error) {
+    console.error('Order submission error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ---------- Reviews ----------
+app.post('/api/frontend/review', async (req, res) => {
+  try {
+    const review = new Review(req.body);
+    await review.save();
+    
+    const emailSubject = `⭐ New Review Submitted by ${review.name}`;
+    const emailMessage = `
+      <div style="font-family: Arial, sans-serif; padding: 20px;">
+        <h2 style="color: #f59e0b;">⭐ New Review Submitted</h2>
+        <div style="background: #f3f4f6; padding: 20px; border-radius: 10px;">
+          <p><strong>Name:</strong> ${review.name}</p>
+          <p><strong>Location:</strong> ${review.location}</p>
+          <p><strong>Rating:</strong> ${review.rating}/5</p>
+          <p><strong>Review:</strong> ${review.text}</p>
+          <p><strong>Submitted At:</strong> ${new Date(review.createdAt).toLocaleString()}</p>
+        </div>
+        <br>
+        <a href="${process.env.ADMIN_URL || 'https://fancy-hamster-878a22.netlify.app'}#reviews" 
+           style="background: #f59e0b; color: white; padding: 12px 24px; text-decoration: none; border-radius: 5px;">
+          Approve Review
+        </a>
+      </div>
+    `;
+    
+    sendEmailNotification(emailSubject, emailMessage).catch(console.error);
+    
+    res.json({ 
+      success: true, 
+      message: 'Review submitted successfully',
+      review 
+    });
+  } catch (error) {
+    console.error('Review submission error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.get('/api/frontend/reviews', async (req, res) => {
   try {
     const reviews = await Review.find({ isApproved: true })
@@ -276,7 +433,7 @@ app.get('/api/frontend/reviews', async (req, res) => {
   }
 });
 
-// Get active sliders
+// ---------- Sliders ----------
 app.get('/api/frontend/sliders', async (req, res) => {
   try {
     const sliders = await Slider.find({ isActive: true }).sort({ slideNumber: 1 });
@@ -286,7 +443,7 @@ app.get('/api/frontend/sliders', async (req, res) => {
   }
 });
 
-// Get website settings
+// ---------- Settings ----------
 app.get('/api/frontend/settings', async (req, res) => {
   try {
     let settings = await WebsiteSettings.findOne();
@@ -300,53 +457,17 @@ app.get('/api/frontend/settings', async (req, res) => {
   }
 });
 
-// Submit order
-app.post('/api/frontend/order', async (req, res) => {
-  try {
-    const orderData = {
-      ...req.body,
-      orderId: generateOrderId()
-    };
-    
-    const order = new Order(orderData);
-    await order.save();
-    
-    res.json({
-      success: true,
-      message: 'অর্ডার সফল হয়েছে!',
-      orderId: order.orderId
-    });
-  } catch (error) {
-    console.error('Order error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// Submit review
-app.post('/api/frontend/review', async (req, res) => {
-  try {
-    const review = new Review(req.body);
-    await review.save();
-    
-    res.json({
-      success: true,
-      message: 'রিভিউ জমা দেওয়া হয়েছে! এপ্রুভ হলে দেখানো হবে।'
-    });
-  } catch (error) {
-    console.error('Review error:', error);
-    res.status(500).json({ error: error.message });
-  }
-});
-
 // ============================================
-// ADMIN API ENDPOINTS
+// ✅ ADMIN API - Protected Routes
 // ============================================
 
-// Admin login
+// ---------- Authentication ----------
 app.post('/api/admin/login', async (req, res) => {
   const { username, password } = req.body;
   
-  if (username === process.env.ADMIN_USERNAME && password === process.env.ADMIN_PASSWORD) {
+  if (username === (process.env.ADMIN_USERNAME || 'admin') && 
+      password === (process.env.ADMIN_PASSWORD || 'admin123')) {
+    
     let admin = await Admin.findOne({ username });
     if (!admin) {
       admin = new Admin({ username, password });
@@ -356,8 +477,8 @@ app.post('/api/admin/login', async (req, res) => {
     admin.lastLogin = new Date();
     await admin.save();
     
-    res.json({
-      success: true,
+    res.json({ 
+      success: true, 
       message: 'Login successful',
       username: admin.username
     });
@@ -366,53 +487,146 @@ app.post('/api/admin/login', async (req, res) => {
   }
 });
 
-// Dashboard stats
+// ---------- Dashboard Stats ----------
 app.get('/api/admin/dashboard/stats', async (req, res) => {
   try {
-    const [
-      totalOrders,
-      pendingOrders,
-      deliveredOrders,
-      totalProducts,
-      totalReviews,
-      pendingReviews
-    ] = await Promise.all([
-      Order.countDocuments(),
-      Order.countDocuments({ status: 'pending' }),
-      Order.countDocuments({ status: 'delivered' }),
-      Product.countDocuments(),
-      Review.countDocuments(),
-      Review.countDocuments({ isApproved: false })
-    ]);
+    const totalOrders = await Order.countDocuments();
+    const pendingOrders = await Order.countDocuments({ status: 'pending' });
     
-    const deliveredOrdersList = await Order.find({ status: 'delivered' });
-    const totalRevenue = deliveredOrdersList.reduce((sum, order) => sum + (order.totalPrice || 0), 0);
+    const deliveredOrders = await Order.find({ status: 'delivered' });
+    const totalRevenue = deliveredOrders.reduce((sum, order) => sum + order.totalPrice, 0);
+    
+    const totalProducts = await Product.countDocuments();
+    const totalReviews = await Review.countDocuments();
+    const pendingReviews = await Review.countDocuments({ isApproved: false });
     
     const recentOrders = await Order.find()
       .sort({ createdAt: -1 })
       .limit(5)
       .lean();
     
+    const unreadOrders = await Order.countDocuments({ isRead: false });
+    const unreadReviews = await Review.countDocuments({ isRead: false });
+    
     res.json({
       totalOrders,
       pendingOrders,
-      deliveredOrders,
+      deliveredOrders: deliveredOrders.length,
       totalRevenue,
       totalProducts,
       totalReviews,
       pendingReviews,
-      recentOrders
+      recentOrders,
+      unreadOrders,
+      unreadReviews
     });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// ============================================
-// ADMIN PRODUCTS API
-// ============================================
+// ---------- Notifications ----------
+app.get('/api/admin/notifications', async (req, res) => {
+  try {
+    const unreadOrders = await Order.find({ isRead: false }).sort({ createdAt: -1 });
+    const unreadReviews = await Review.find({ isRead: false }).sort({ createdAt: -1 });
+    
+    res.json({
+      unreadOrders,
+      unreadReviews
+    });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
 
-// Get all products
+app.post('/api/admin/notifications/read', async (req, res) => {
+  try {
+    const { type, id } = req.body;
+    
+    if (type === 'order') {
+      await Order.findByIdAndUpdate(id, { isRead: true });
+    } else if (type === 'review') {
+      await Review.findByIdAndUpdate(id, { isRead: true });
+    } else if (type === 'all') {
+      await Order.updateMany({ isRead: false }, { isRead: true });
+      await Review.updateMany({ isRead: false }, { isRead: true });
+    }
+    
+    res.json({ success: true, message: 'Marked as read' });
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ---------- Image Upload ----------
+app.post('/api/upload', async (req, res) => {
+  try {
+    if (!req.files || Object.keys(req.files).length === 0) {
+      return res.status(400).json({ error: 'No files were uploaded' });
+    }
+    
+    const file = req.files.file;
+    const folder = req.body.folder || 'general';
+    
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg', 'image/gif', 'image/webp'];
+    if (!allowedTypes.includes(file.mimetype)) {
+      return res.status(400).json({ error: 'Invalid file type. Only images are allowed' });
+    }
+    
+    if (file.size > 5 * 1024 * 1024) {
+      return res.status(400).json({ error: 'File too large. Max size is 5MB' });
+    }
+    
+    const fileUrl = await saveUploadedFile(file, folder);
+    
+    if (!fileUrl) {
+      return res.status(500).json({ error: 'Failed to save file' });
+    }
+    
+    res.json({
+      success: true,
+      message: 'File uploaded successfully',
+      url: fileUrl
+    });
+    
+  } catch (error) {
+    console.error('Upload error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.post('/api/upload/base64', async (req, res) => {
+  try {
+    const { base64, folder = 'general' } = req.body;
+    
+    if (!base64) {
+      return res.status(400).json({ error: 'No base64 data provided' });
+    }
+    
+    if (!base64.startsWith('data:image/')) {
+      return res.status(400).json({ error: 'Invalid base64 image data' });
+    }
+    
+    const fileUrl = await uploadBase64ToCloudinary(base64, folder);
+    
+    if (!fileUrl) {
+      return res.status(500).json({ error: 'Failed to save image' });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Image uploaded successfully',
+      url: fileUrl
+    });
+    
+  } catch (error) {
+    console.error('Base64 upload error:', error);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// ---------- Products Management (Admin) ----------
 app.get('/api/admin/products', async (req, res) => {
   try {
     const products = await Product.find().sort({ createdAt: -1 });
@@ -422,94 +636,126 @@ app.get('/api/admin/products', async (req, res) => {
   }
 });
 
-// Create product with Cloudinary
 app.post('/api/admin/products', async (req, res) => {
   try {
     const productData = req.body;
+    console.log('🔄 নতুন পণ্য তৈরি শুরু...');
     
-    // Process color images
+    // Handle color images with Cloudinary
     if (productData.colors && Array.isArray(productData.colors)) {
+      console.log(`🎨 ${productData.colors.length} টি রং প্রসেসিং...`);
+      
       for (let i = 0; i < productData.colors.length; i++) {
-        const color = productData.colors[i];
+        let color = productData.colors[i];
         
-        if (color.imageFile && color.imageFile.startsWith('data:image')) {
-          const imageUrl = await uploadToCloudinary(color.imageFile, 'products/colors');
+        if (color.imageFile && color.imageFile.startsWith('data:image/')) {
+          console.log(`☁️ Cloudinary - রং ${i+1} ইমেজ আপলোড...`);
+          const imageUrl = await uploadBase64ToCloudinary(color.imageFile, 'products/colors');
+          
           if (imageUrl) {
             color.image = imageUrl;
+            color.isBase64 = false;
           }
           delete color.imageFile;
+        } else if (!color.image) {
+          color.image = 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80';
         }
       }
+    }
+    
+    // Set category if not provided
+    if (!productData.category) {
+      productData.category = 'others';
+    }
+    
+    // Calculate offer percentage if not provided
+    if (!productData.offerPercentage && productData.regularPrice && productData.offerPrice) {
+      productData.offerPercentage = Math.round(((productData.regularPrice - productData.offerPrice) / productData.regularPrice) * 100);
     }
     
     const product = new Product(productData);
     await product.save();
     
-    res.json({
-      success: true,
+    console.log('✅ পণ্য সফলভাবে তৈরি হয়েছে');
+    
+    res.json({ 
+      success: true, 
       message: 'পণ্য সফলভাবে যোগ করা হয়েছে',
-      product
+      product 
     });
+    
   } catch (error) {
-    console.error('Product create error:', error);
-    res.status(500).json({ error: error.message });
+    console.error('❌ পণ্য তৈরি ত্রুটি:', error);
+    res.status(500).json({ 
+      error: 'পণ্য তৈরি করতে সমস্যা হয়েছে',
+      details: error.message 
+    });
   }
 });
 
-// Update product
 app.put('/api/admin/products/:id', async (req, res) => {
   try {
     const productData = req.body;
+    console.log(`🔄 পণ্য ${req.params.id} আপডেট শুরু...`);
     
-    // Process color images
+    // Handle color images with Cloudinary
     if (productData.colors && Array.isArray(productData.colors)) {
       for (let i = 0; i < productData.colors.length; i++) {
-        const color = productData.colors[i];
+        let color = productData.colors[i];
         
-        if (color.imageFile && color.imageFile.startsWith('data:image')) {
-          const imageUrl = await uploadToCloudinary(color.imageFile, 'products/colors');
+        if (color.imageFile && color.imageFile.startsWith('data:image/')) {
+          console.log(`☁️ Cloudinary - রং ${i+1} ইমেজ আপলোড...`);
+          const imageUrl = await uploadBase64ToCloudinary(color.imageFile, 'products/colors');
+          
           if (imageUrl) {
             color.image = imageUrl;
+            color.isBase64 = false;
           }
           delete color.imageFile;
         }
       }
     }
     
-    const product = await Product.findByIdAndUpdate(
-      req.params.id,
-      productData,
-      { new: true }
-    );
+    // Recalculate offer percentage
+    if (productData.regularPrice && productData.offerPrice) {
+      productData.offerPercentage = Math.round(((productData.regularPrice - productData.offerPrice) / productData.regularPrice) * 100);
+    }
     
-    res.json({
-      success: true,
-      message: 'পণ্য আপডেট হয়েছে',
-      product
+    const product = await Product.findByIdAndUpdate(req.params.id, productData, { new: true });
+    
+    console.log('✅ পণ্য সফলভাবে আপডেট হয়েছে');
+    
+    res.json({ 
+      success: true, 
+      message: 'পণ্য সফলভাবে আপডেট হয়েছে', 
+      product 
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('❌ পণ্য আপডেট ত্রুটি:', error);
+    res.status(500).json({ 
+      error: 'পণ্য আপডেট করতে সমস্যা হয়েছে',
+      details: error.message 
+    });
   }
 });
 
-// Delete product
 app.delete('/api/admin/products/:id', async (req, res) => {
   try {
     await Product.findByIdAndDelete(req.params.id);
-    res.json({ success: true, message: 'পণ্য ডিলিট হয়েছে' });
+    res.json({ success: true, message: 'পণ্য সফলভাবে ডিলিট হয়েছে' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// ============================================
-// ADMIN ORDERS API
-// ============================================
-
+// ---------- Orders Management (Admin) ----------
 app.get('/api/admin/orders', async (req, res) => {
   try {
     const { status } = req.query;
-    const query = status ? { status } : {};
+    let query = {};
+    if (status) {
+      query.status = status;
+    }
     const orders = await Order.find(query).sort({ createdAt: -1 });
     res.json({ orders });
   } catch (error) {
@@ -522,23 +768,20 @@ app.put('/api/admin/orders/:id/status', async (req, res) => {
     const { status, notes } = req.body;
     const order = await Order.findByIdAndUpdate(
       req.params.id,
-      { status, notes },
+      { status, notes, isRead: true },
       { new: true }
     );
-    res.json({ success: true, order });
+    res.json({ success: true, message: 'Order status updated', order });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// ============================================
-// ADMIN REVIEWS API
-// ============================================
-
+// ---------- Reviews Management (Admin) ----------
 app.get('/api/admin/reviews', async (req, res) => {
   try {
     const { approved } = req.query;
-    const query = {};
+    let query = {};
     if (approved !== undefined) {
       query.isApproved = approved === 'true';
     }
@@ -553,10 +796,10 @@ app.put('/api/admin/reviews/:id/approve', async (req, res) => {
   try {
     const review = await Review.findByIdAndUpdate(
       req.params.id,
-      { isApproved: true },
+      { isApproved: true, isRead: true },
       { new: true }
     );
-    res.json({ success: true, review });
+    res.json({ success: true, message: 'Review approved', review });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -565,16 +808,13 @@ app.put('/api/admin/reviews/:id/approve', async (req, res) => {
 app.delete('/api/admin/reviews/:id', async (req, res) => {
   try {
     await Review.findByIdAndDelete(req.params.id);
-    res.json({ success: true });
+    res.json({ success: true, message: 'Review deleted' });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
-// ============================================
-// ADMIN SLIDERS API with Cloudinary
-// ============================================
-
+// ---------- Sliders Management (Admin) ----------
 app.get('/api/admin/sliders', async (req, res) => {
   try {
     const sliders = await Slider.find().sort({ slideNumber: 1 });
@@ -587,38 +827,54 @@ app.get('/api/admin/sliders', async (req, res) => {
 app.post('/api/admin/sliders', async (req, res) => {
   try {
     const sliderData = req.body;
+    console.log('🔄 নতুন স্লাইডার তৈরি শুরু...');
     
-    // Upload image to Cloudinary
-    if (sliderData.imageFile && sliderData.imageFile.startsWith('data:image')) {
-      const imageUrl = await uploadToCloudinary(sliderData.imageFile, 'sliders');
+    // Handle image upload to Cloudinary
+    if (sliderData.imageFile && sliderData.imageFile.startsWith('data:image/')) {
+      console.log('☁️ স্লাইডার ইমেজ Cloudinary তে আপলোড...');
+      const imageUrl = await uploadBase64ToCloudinary(sliderData.imageFile, 'sliders');
+      
       if (imageUrl) {
         sliderData.imageUrl = imageUrl;
+        sliderData.isBase64 = false;
       }
       delete sliderData.imageFile;
+    } else if (!sliderData.imageUrl) {
+      sliderData.imageUrl = 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80';
     }
     
     const slider = new Slider(sliderData);
     await slider.save();
     
-    res.json({
-      success: true,
-      message: 'স্লাইডার যোগ করা হয়েছে',
-      slider
+    console.log('✅ স্লাইডার সফলভাবে তৈরি হয়েছে');
+    
+    res.json({ 
+      success: true, 
+      message: 'স্লাইডার সফলভাবে যোগ করা হয়েছে',
+      slider 
     });
+    
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('❌ স্লাইডার তৈরি ত্রুটি:', error);
+    res.status(500).json({ 
+      error: 'স্লাইডার তৈরি করতে সমস্যা হয়েছে',
+      details: error.message 
+    });
   }
 });
 
 app.put('/api/admin/sliders/:id', async (req, res) => {
   try {
     const sliderData = req.body;
+    console.log(`🔄 স্লাইডার ${req.params.id} আপডেট শুরু...`);
     
-    // Upload new image if provided
-    if (sliderData.imageFile && sliderData.imageFile.startsWith('data:image')) {
-      const imageUrl = await uploadToCloudinary(sliderData.imageFile, 'sliders');
+    if (sliderData.imageFile && sliderData.imageFile.startsWith('data:image/')) {
+      console.log('☁️ স্লাইডার ইমেজ Cloudinary তে আপলোড...');
+      const imageUrl = await uploadBase64ToCloudinary(sliderData.imageFile, 'sliders');
+      
       if (imageUrl) {
         sliderData.imageUrl = imageUrl;
+        sliderData.isBase64 = false;
       }
       delete sliderData.imageFile;
     }
@@ -629,20 +885,23 @@ app.put('/api/admin/sliders/:id', async (req, res) => {
       { new: true }
     );
     
-    res.json({
-      success: true,
-      message: 'স্লাইডার আপডেট হয়েছে',
-      slider
+    console.log('✅ স্লাইডার সফলভাবে আপডেট হয়েছে');
+    
+    res.json({ 
+      success: true, 
+      message: 'স্লাইডার আপডেট হয়েছে', 
+      slider 
     });
   } catch (error) {
-    res.status(500).json({ error: error.message });
+    console.error('❌ স্লাইডার আপডেট ত্রুটি:', error);
+    res.status(500).json({ 
+      error: 'স্লাইডার আপডেট করতে সমস্যা হয়েছে',
+      details: error.message 
+    });
   }
 });
 
-// ============================================
-// ADMIN SETTINGS API
-// ============================================
-
+// ---------- Settings Management (Admin) ----------
 app.get('/api/admin/settings', async (req, res) => {
   try {
     let settings = await WebsiteSettings.findOne();
@@ -666,120 +925,44 @@ app.put('/api/admin/settings', async (req, res) => {
     }
     settings.updatedAt = new Date();
     await settings.save();
-    res.json({ success: true, settings });
+    res.json({ success: true, message: 'Settings updated', settings });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
 });
 
 // ============================================
-// ADMIN NOTIFICATIONS API
-// ============================================
-
-app.get('/api/admin/notifications', async (req, res) => {
-  try {
-    const [unreadOrders, unreadReviews] = await Promise.all([
-      Order.find({ isRead: false }).sort({ createdAt: -1 }).limit(10),
-      Review.find({ isRead: false }).sort({ createdAt: -1 }).limit(10)
-    ]);
-    
-    res.json({ unreadOrders, unreadReviews });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.post('/api/admin/notifications/read', async (req, res) => {
-  try {
-    const { type, id } = req.body;
-    
-    if (type === 'order' && id) {
-      await Order.findByIdAndUpdate(id, { isRead: true });
-    } else if (type === 'review' && id) {
-      await Review.findByIdAndUpdate(id, { isRead: true });
-    } else if (type === 'all') {
-      await Order.updateMany({ isRead: false }, { isRead: true });
-      await Review.updateMany({ isRead: false }, { isRead: true });
-    }
-    
-    res.json({ success: true });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// ============================================
-// UPLOAD ENDPOINTS
-// ============================================
-
-app.post('/api/upload', async (req, res) => {
-  try {
-    if (!req.files || !req.files.image) {
-      return res.status(400).json({ error: 'No image uploaded' });
-    }
-    
-    const image = req.files.image;
-    const folder = req.body.folder || 'uploads';
-    
-    const imageUrl = await uploadToCloudinary(image, folder);
-    
-    if (!imageUrl) {
-      return res.status(500).json({ error: 'Upload failed' });
-    }
-    
-    res.json({
-      success: true,
-      url: imageUrl
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-app.post('/api/upload/base64', async (req, res) => {
-  try {
-    const { base64, folder } = req.body;
-    
-    if (!base64) {
-      return res.status(400).json({ error: 'No base64 data' });
-    }
-    
-    const imageUrl = await uploadToCloudinary(base64, folder || 'uploads');
-    
-    if (!imageUrl) {
-      return res.status(500).json({ error: 'Upload failed' });
-    }
-    
-    res.json({
-      success: true,
-      url: imageUrl
-    });
-  } catch (error) {
-    res.status(500).json({ error: error.message });
-  }
-});
-
-// ============================================
-// INITIALIZE DATABASE
+// ✅ Database Initialization
 // ============================================
 
 async function initializeDatabase() {
   try {
-    // Create default admin
+    console.log('🔄 ডাটাবেস ইনিশিয়ালাইজ করা হচ্ছে...');
+    
+    // Create default admin if not exists
     const adminCount = await Admin.countDocuments();
     if (adminCount === 0) {
       await Admin.create({
         username: process.env.ADMIN_USERNAME || 'admin',
         password: process.env.ADMIN_PASSWORD || 'admin123'
       });
-      console.log('✅ Default admin created');
+      console.log('✅ ডিফল্ট এডমিন তৈরি করা হয়েছে');
     }
     
-    // Create default settings
+    // Create default settings if not exists
     const settingsCount = await WebsiteSettings.countDocuments();
     if (settingsCount === 0) {
-      await WebsiteSettings.create({});
-      console.log('✅ Default settings created');
+      await WebsiteSettings.create({
+        whatsappNumber: '01911465879',
+        phoneNumber: '01911465879',
+        footerText: 'প্রিমিয়াম পাঞ্জাবি, টি-শার্ট, থ্রি পিজ ও ফিটনেস পরিধানের নির্ভরযোগ্য ঠিকানা',
+        deliveryChargeInsideDhaka: 60,
+        deliveryChargeOutsideDhaka: 160,
+        serviceHours: 'সকাল ৯টা - রাত ১০টা',
+        homePageTitle: 'আমাদের কালেকশন',
+        orderFormTitle: 'পণ্য অর্ডার ফর্ম'
+      });
+      console.log('✅ ডিফল্ট সেটিংস তৈরি করা হয়েছে');
     }
     
     // Create sample products if none exist
@@ -787,19 +970,20 @@ async function initializeDatabase() {
     if (productCount === 0) {
       await Product.create([
         {
-          name: "রয়েল ব্লু পাঞ্জাবি",
-          description: "উচ্চমানের সুতি কাপড়, প্রিমিয়াম ফিনিশিং, আরামদায়ক ফিট",
+          name: "রয়েল সিল্ক পাঞ্জাবি",
+          description: "উচ্চমানের সিল্ক কাপড়ে তৈরি, হাতে তৈরি এমব্রয়ডারি, ফিটিং ডিজাইন",
           category: "panjabi",
           colors: [{
-            name: "রয়েল ব্লু",
-            code: "#4169E1",
-            image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800"
+            name: "লাল ও সোনালী",
+            code: "#dc2626",
+            image: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80"
           }],
           size: "S, M, L, XL, XXL",
-          regularPrice: 1890,
-          offerPrice: 1390,
-          offerPercentage: 26,
-          isActive: true
+          regularPrice: 3200,
+          offerPrice: 2499,
+          offerPercentage: 22,
+          isActive: true,
+          hasVariants: true
         },
         {
           name: "প্রিমিয়াম কটন টি-শার্ট",
@@ -814,59 +998,121 @@ async function initializeDatabase() {
           regularPrice: 990,
           offerPrice: 690,
           offerPercentage: 30,
+          isActive: true,
+          hasVariants: true
+        },
+        {
+          name: "স্ট্রেচিং ব্যান্ড",
+          description: "হাত ও কাঁধের ফ্লেক্সিবিলিটি বাড়াতে, জিম ও হোম ওয়ার্কআউটের জন্য",
+          category: "fitness",
+          colors: [{
+            name: "কালো",
+            code: "#000000",
+            image: "https://images.unsplash.com/photo-1581092921461-39b9c3e7b7b5?w=800"
+          }],
+          size: "One Size",
+          regularPrice: 690,
+          offerPrice: 490,
+          offerPercentage: 29,
+          features: ["উচ্চমানের ল্যাটেক্স ম্যাটেরিয়াল", "হাত ও কাঁধের স্ট্রেচিং", "ফ্লেক্সিবিলিটি বৃদ্ধি"],
+          hasVariants: false,
           isActive: true
         }
       ]);
-      console.log('✅ Sample products created');
+      console.log('✅ স্যাম্পল পণ্য তৈরি করা হয়েছে');
     }
     
-    // Create sample sliders
+    // Create sample sliders if none exist
     const sliderCount = await Slider.countDocuments();
     if (sliderCount === 0) {
       await Slider.create([
         {
           slideNumber: 1,
-          title: "রয়েল ট্রাস্ট BD",
-          subtitle: "প্রিমিয়াম পাঞ্জাবি",
-          description: "উচ্চমানের পাঞ্জাবি ও ফ্যাশনেবল পোশাক",
-          imageUrl: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=1600",
-          badgeText: "সীমিত সময়ের অফার",
+          title: "রয়েল সিল্ক",
+          subtitle: "পাঞ্জাবি",
+          description: "হাতে তৈরি এমব্রয়ডারি, উচ্চমানের সিল্ক কাপড়, রাজকীয় অভিজ্ঞতা",
+          imageUrl: "https://images.unsplash.com/photo-1596755094514-f87e34085b2c?ixlib=rb-4.0.3&auto=format&fit=crop&w=1600&q=80",
+          badgeText: "প্রিমিয়াম কালেকশন",
           badgeColor: "red",
-          price: 1390,
-          originalPrice: 1890,
+          price: 2499,
+          originalPrice: 3200,
+          isActive: true
+        },
+        {
+          slideNumber: 2,
+          title: "টি-শার্ট",
+          subtitle: "কালেকশন",
+          description: "আরামদায়ক ও ফ্যাশনেবল প্রিমিয়াম কটন টি-শার্ট",
+          imageUrl: "https://images.unsplash.com/photo-1503342394128-c104d54dba01?w=1600",
+          badgeText: "নতুন কালেকশন",
+          badgeColor: "green",
+          price: 690,
+          originalPrice: 990,
+          isActive: true
+        },
+        {
+          slideNumber: 3,
+          title: "থ্রি পিজ",
+          subtitle: "সেট",
+          description: "পাঞ্জাবি + পায়জামা + কোট, সম্পূর্ণ রয়েল লুক",
+          imageUrl: "https://images.unsplash.com/photo-1602810318383-e386cc2a3ccf?w=1600",
+          badgeText: "২৪% ছাড়",
+          badgeColor: "purple",
+          price: 3490,
+          originalPrice: 4590,
           isActive: true
         }
       ]);
-      console.log('✅ Sample sliders created');
+      console.log('✅ স্যাম্পল স্লাইডার তৈরি করা হয়েছে');
     }
     
-    console.log('✅ Database initialization complete');
+    console.log('✅ ডাটাবেস ইনিশিয়ালাইজেশন সম্পূর্ণ');
   } catch (error) {
-    console.error('❌ Database initialization error:', error.message);
+    console.error('❌ ডাটাবেস ইনিশিয়ালাইজেশন ত্রুটি:', error.message);
   }
 }
 
 // ============================================
-// START SERVER
+// ✅ Start Server
 // ============================================
 
 const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, async () => {
-  console.log(`\n🚀 Server running on port ${PORT}`);
-  console.log(`📱 Frontend: http://localhost:${PORT}`);
-  console.log(`🔧 Admin Panel: http://localhost:${PORT}/admin`);
-  console.log(`📡 API: http://localhost:${PORT}/api`);
-  console.log(`☁️ Cloudinary: ${process.env.CLOUDINARY_CLOUD_NAME || 'Not configured'}\n`);
+const server = app.listen(PORT, async () => {
+  console.log('\n=================================');
+  console.log(`🚀 সার্ভার পোর্ট ${PORT} এ চলছে`);
+  console.log('=================================');
+  console.log(`📡 লোকাল: http://localhost:${PORT}`);
+  console.log(`📡 হেলথ চেক: http://localhost:${PORT}/health`);
+  console.log(`☁️ Cloudinary: ${process.env.CLOUDINARY_CLOUD_NAME ? 'কনফিগার্ড' : 'না'}`);
+  console.log(`📧 ইমেইল: ${process.env.EMAIL_USER ? 'এনাবলড' : 'ডিসএবলড'}`);
+  console.log(`📁 আপলোড ডির: ${uploadsDir}`);
+  console.log('=================================\n');
   
-  await initializeDatabase();
+  // Test Cloudinary connection
+  if (process.env.CLOUDINARY_CLOUD_NAME) {
+    try {
+      const testImage = 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNkYPhfDwAChwGA60e6kgAAAABJRU5ErkJggg==';
+      await cloudinary.uploader.upload(testImage, { folder: 'test' });
+      console.log('✅ Cloudinary কানেকশন সফল!');
+    } catch (error) {
+      console.error('❌ Cloudinary কানেকশন ব্যর্থ:', error.message);
+    }
+  }
+  
+  // Initialize database after connection
+  setTimeout(initializeDatabase, 2000);
 });
 
-// Handle uncaught exceptions
-process.on('uncaughtException', (err) => {
-  console.error('❌ Uncaught Exception:', err);
+// Handle graceful shutdown
+process.on('SIGTERM', () => {
+  console.log('SIGTERM signal received: closing HTTP server');
+  server.close(() => {
+    console.log('HTTP server closed');
+    mongoose.connection.close(false, () => {
+      console.log('MongoDB connection closed');
+      process.exit(0);
+    });
+  });
 });
 
-process.on('unhandledRejection', (err) => {
-  console.error('❌ Unhandled Rejection:', err);
-});
+module.exports = app;
