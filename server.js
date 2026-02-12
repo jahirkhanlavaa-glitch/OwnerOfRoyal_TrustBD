@@ -21,8 +21,8 @@ cloudinary.config({
 // ✅ Middleware
 app.use(cors({
   origin: [
-    'https://bucolic-taiyaki-493fa1.netlify.app',
-    'https://resplendent-druid-56d9d7.netlify.app',
+    'https://heartfelt-quokka-7f7a23.netlify.app',
+    'https://singular-kashata-4cf2df.netlify.app',
     'http://localhost:3000',
     'http://localhost:5000'
   ],
