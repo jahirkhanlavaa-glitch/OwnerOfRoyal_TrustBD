@@ -21,8 +21,8 @@ cloudinary.config({
 // ✅ মিডলওয়্যার
 app.use(cors({
   origin: [
-    'https://hilarious-rolypoly-c0d8ff.netlify.app',
-    'https://fancy-hamster-878a22.netlify.app',
+    'https://melodious-gumption-57342b.netlify.app',
+    'https://nimble-sprite-f3f495.netlify.app',
     'http://localhost:3000',
     'http://localhost:5500',
     'http://127.0.0.1:5500'
