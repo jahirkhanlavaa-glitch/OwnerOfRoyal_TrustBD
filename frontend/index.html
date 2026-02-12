@@ -249,7 +249,7 @@
             <button class="category-tab" data-category="panjabi">পাঞ্জাবি</button>
             <button class="category-tab" data-category="tshirt">টি-শার্ট</button>
             <button class="category-tab" data-category="three-piece">থ্রি পিজ</button>
-            <button class="category-tab" data-category="fitness">ফিটনেস</button>
+            <button class="category-tab" data-category="fitness">ইসপোর্স ফিটনেস</button>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="product-container">
@@ -430,28 +430,38 @@
 
 <script>
     // ============================================
-    // ✅ গ্লোবাল কনফিগারেশন
+    // গ্লোবাল কনফিগারেশন - API URL
     // ============================================
+    
     const API_BASE_URL = 'https://ownerofroyal-trustbd.onrender.com';
+    
+    // লোকাল ডেভেলপমেন্টের জন্য (কমেন্ট আনলক করুন)
     // const API_BASE_URL = 'http://localhost:5000';
+    
+    // ============================================
+    // গ্লোবাল ভেরিয়েবল
+    // ============================================
     
     let products = [];
     let filteredProducts = [];
     let websiteSettings = {};
     
     // ============================================
-    // ✅ ডকুমেন্ট রেডি
+    // ডকুমেন্ট রেডি - সবকিছু লোড
     // ============================================
+    
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('current-year').textContent = new Date().getFullYear();
+        
         loadAllData();
         setupUI();
         setupCategoryTabs();
     });
     
     // ============================================
-    // ✅ ডেটা লোড
+    // ডেটা লোড ফাংশন
     // ============================================
+    
     async function loadAllData() {
         try {
             await Promise.all([
@@ -538,8 +548,9 @@
     }
     
     // ============================================
-    // ✅ ডেমো ডেটা
+    // ডেমো ডেটা
     // ============================================
+    
     function getDemoProducts() {
         return [
             {
@@ -587,8 +598,9 @@
     }
     
     // ============================================
-    // ✅ UI আপডেট
+    // UI আপডেট ফাংশন
     // ============================================
+    
     function updateWebsiteSettingsUI() {
         const whatsappNumber = websiteSettings.whatsappNumber || '01911465879';
         document.getElementById('whatsapp-number').textContent = whatsappNumber;
@@ -646,6 +658,7 @@
                 'three-piece': 'থ্রি পিজ', fitness: 'ফিটনেস' 
             }[product.category] || product.category;
             
+            // ফিটনেস প্রোডাক্ট
             if (product.category === 'fitness' && product.hasVariants === false) {
                 return `<div class="product-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
                     <div class="relative">
@@ -675,6 +688,7 @@
                 </div>`;
             }
             
+            // অন্যান্য পণ্য
             return `<div class="product-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
                 <div class="relative">
                     <div class="h-48 bg-gray-100 overflow-hidden">
@@ -717,6 +731,7 @@
             </div>`;
         }).join('');
         
+        // কালার সিলেক্টর
         document.querySelectorAll('.color-option').forEach(el => {
             el.addEventListener('click', function() {
                 const pid = this.dataset.productId;
@@ -880,14 +895,17 @@
     }
     
     // ============================================
-    // ✅ সেটআপ ফাংশন
+    // সেটআপ ফাংশন
     // ============================================
+    
     function setupUI() {
+        // হ্যামবার্গার
         document.getElementById('hamburger').addEventListener('click', function() {
             this.classList.toggle('active');
             document.getElementById('mobileMenu').classList.toggle('active');
         });
         
+        // নেভ লিংক
         document.querySelectorAll('.nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -905,6 +923,7 @@
             });
         });
         
+        // স্ক্রল ইভেন্ট
         window.addEventListener('scroll', () => {
             const sections = document.querySelectorAll('section, footer');
             let current = '';
@@ -921,16 +940,17 @@
             });
         });
         
+        // কোয়ান্টিটি বাটন
         document.getElementById('decrease-qty').addEventListener('click', () => {
             const q = document.getElementById('quantity');
             if (parseInt(q.value) > 1) q.value = parseInt(q.value) - 1;
         });
-        
         document.getElementById('increase-qty').addEventListener('click', () => {
             const q = document.getElementById('quantity');
             q.value = parseInt(q.value) + 1;
         });
         
+        // সাইজ সিলেক্টর
         document.getElementById('product-select').addEventListener('change', function() {
             const pid = this.value;
             const product = products.find(p => p._id === pid);
@@ -951,6 +971,7 @@
             }
         });
         
+        // অর্ডার ফর্ম
         document.getElementById('order-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1016,6 +1037,7 @@
             }
         });
         
+        // রিভিউ ফর্ম
         document.getElementById('review-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1055,6 +1077,7 @@
             }
         });
         
+        // অ্যাড টু অর্ডার বাটন
         document.addEventListener('click', function(e) {
             const btn = e.target.closest('.add-to-order');
             if (btn) {
@@ -1065,6 +1088,7 @@
             }
         });
         
+        // স্টার রেটিং
         const stars = document.querySelectorAll('#rating-stars i');
         stars.forEach(star => {
             star.addEventListener('mouseover', function() {
@@ -1088,10 +1112,10 @@
             });
         });
         
+        // মডাল
         document.getElementById('close-modal').addEventListener('click', () => {
             document.getElementById('order-success-modal').classList.add('hidden');
         });
-        
         document.getElementById('close-review-modal').addEventListener('click', () => {
             document.getElementById('review-success-modal').classList.add('hidden');
         });
@@ -1114,8 +1138,9 @@
     }
     
     // ============================================
-    // ✅ হেল্পার ফাংশন
+    // হেল্পার ফাংশন
     // ============================================
+    
     function getStarRating(rating) {
         let stars = '';
         for (let i = 1; i <= 5; i++) {
