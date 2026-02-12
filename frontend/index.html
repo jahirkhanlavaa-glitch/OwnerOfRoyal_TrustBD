@@ -31,7 +31,7 @@
         }
         .color-option.active { border-color: #333; transform: scale(1.1); }
         
-        /* স্লাইডার স্টাইল - আপডেটেড */
+        /* স্লাইডার স্টাইল */
         .hero-slider-container {
             position: relative; 
             width: 100%; 
@@ -65,7 +65,6 @@
             color: white;
         }
         
-        /* লেখা কাটা যাওয়ার সমস্যা সমাধান */
         .slide-text-container {
             background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(8px);
@@ -114,6 +113,7 @@
             100% { transform: translateY(0px); }
         }
         
+        /* নেভিগেশন বার - আপডেটেড */
         .navbar {
             position: fixed; top: 0; left: 0; right: 0; z-index: 1000;
             background: white; box-shadow: 0 2px 10px rgba(0,0,0,0.1);
@@ -129,6 +129,208 @@
             height: 2px; background: #dc2626; border-radius: 2px;
         }
         
+        /* লোগো স্টাইল */
+        .logo-container {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 20px;
+            transform: rotate(5deg);
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-icon:hover {
+            transform: rotate(0deg) scale(1.1);
+        }
+        
+        .logo-text {
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .logo-main {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #b91c1c;
+            line-height: 1.2;
+        }
+        
+        .logo-sub {
+            font-size: 0.7rem;
+            color: #6b7280;
+            letter-spacing: 2px;
+        }
+        
+        @media (max-width: 768px) {
+            .logo-main {
+                font-size: 1.2rem;
+            }
+            .logo-sub {
+                font-size: 0.6rem;
+            }
+        }
+        
+        /* হ্যামবার্গার মেনু - আপডেটেড */
+        .hamburger-container {
+            display: none;
+            align-items: center;
+            gap: 15px;
+        }
+        
+        @media (max-width: 768px) {
+            .desktop-menu { display: none !important; }
+            .hamburger-container { display: flex; }
+        }
+        
+        .hamburger {
+            width: 40px;
+            height: 40px;
+            position: relative;
+            cursor: pointer;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 6px;
+            background: #f3f4f6;
+            border-radius: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger:hover {
+            background: #e5e7eb;
+        }
+        
+        .hamburger span {
+            display: block;
+            width: 22px;
+            height: 2px;
+            background: #1f2937;
+            border-radius: 2px;
+            transition: all 0.3s ease;
+        }
+        
+        .hamburger.active {
+            background: #dc2626;
+        }
+        
+        .hamburger.active span {
+            background: white;
+        }
+        
+        .hamburger.active span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+        
+        .hamburger.active span:nth-child(2) {
+            opacity: 0;
+            transform: translateX(-10px);
+        }
+        
+        .hamburger.active span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+        
+        /* মোবাইল মেনু - আপডেটেড */
+        .mobile-menu {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            right: 0;
+            background: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            transform: translateY(-150%);
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 999;
+            border-bottom-left-radius: 20px;
+            border-bottom-right-radius: 20px;
+            max-height: calc(100vh - 70px);
+            overflow-y: auto;
+        }
+        
+        .mobile-menu.active {
+            transform: translateY(0);
+            opacity: 1;
+            visibility: visible;
+        }
+        
+        .mobile-menu .nav-link {
+            display: block;
+            padding: 16px 24px;
+            border-bottom: 1px solid #f3f4f6;
+            margin: 0;
+            font-size: 1.1rem;
+            color: #374151;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-menu .nav-link:hover {
+            background: #fee2e2;
+            color: #dc2626;
+            padding-left: 32px;
+        }
+        
+        .mobile-menu .nav-link i {
+            margin-right: 12px;
+            width: 20px;
+            color: #dc2626;
+        }
+        
+        .mobile-call-btn {
+            display: block;
+            margin: 16px;
+            padding: 16px 24px;
+            background: linear-gradient(135deg, #dc2626, #b91c1c);
+            color: white;
+            text-align: center;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .mobile-call-btn:hover {
+            transform: scale(0.98);
+            background: linear-gradient(135deg, #b91c1c, #991b1b);
+        }
+        
+        .mobile-call-btn i {
+            margin-right: 10px;
+        }
+        
+        /* ওভারলে */
+        .menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(3px);
+            z-index: 998;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .menu-overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        
         .category-tab {
             padding: 12px 24px; font-size: 1.1rem; font-weight: 600;
             border-radius: 50px; transition: all 0.3s ease; cursor: pointer;
@@ -137,7 +339,7 @@
         .category-tab:hover { border-color: #dc2626; color: #dc2626; }
         .category-tab.active { background: #dc2626; color: white; border-color: #dc2626; }
         
-        /* মোবাইল রেসপন্সিভ - আপডেটেড */
+        /* মোবাইল রেসপন্সিভ */
         @media (max-width: 1024px) {
             .hero-slider-container { height: 80vh; }
             .slide-text-container { padding: 25px 30px; }
@@ -193,8 +395,6 @@
                 padding: 8px 16px; 
                 font-size: 0.9rem; 
             }
-            .desktop-menu { display: none; }
-            .hamburger { display: block; }
             
             .slider-nav-btn {
                 width: 40px !important;
@@ -271,7 +471,6 @@
             }
         }
         
-        /* ছোট ডিভাইসের জন্য অতিরিক্ত সাপোর্ট */
         @media (max-width: 360px) {
             .hero-slider-container { min-height: 580px; }
             
@@ -292,33 +491,6 @@
         
         @media (min-height: 800px) and (max-width: 768px) {
             .hero-slider-container { height: 70vh; }
-        }
-        
-        .hamburger {
-            width: 45px; height: 45px; position: relative; cursor: pointer;
-            display: none;
-        }
-        .hamburger span {
-            display: block; width: 30px; height: 3px; background: #333;
-            border-radius: 3px; position: absolute; left: 7.5px;
-            transition: all 0.3s ease;
-        }
-        .hamburger span:nth-child(1) { top: 12px; }
-        .hamburger span:nth-child(2) { top: 21px; }
-        .hamburger span:nth-child(3) { top: 30px; }
-        .hamburger.active span:nth-child(1) { transform: rotate(45deg); top: 21px; }
-        .hamburger.active span:nth-child(2) { opacity: 0; }
-        .hamburger.active span:nth-child(3) { transform: rotate(-45deg); top: 21px; }
-        
-        .mobile-menu {
-            display: none; background: white;
-            box-shadow: 0 5px 10px rgba(0,0,0,0.1);
-            position: absolute; top: 100%; left: 0; right: 0; z-index: 999;
-        }
-        .mobile-menu.active { display: block; }
-        .mobile-menu .nav-link {
-            display: block; padding: 15px 20px;
-            border-bottom: 1px solid #f3f4f6; margin: 0;
         }
         
         .fitness-features {
@@ -374,7 +546,6 @@
             margin-top: 10px;
         }
         
-        /* ফন্ট সাইজ কন্ট্রোল */
         .responsive-text {
             word-break: break-word;
             hyphens: auto;
@@ -383,14 +554,22 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-<!-- নেভিগেশন বার (আগের মতোই) -->
+<!-- নেভিগেশন বার - আপডেটেড -->
 <nav class="navbar" id="navbar">
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center py-3">
-            <div class="flex items-center">
-                <a href="#home" class="text-xl md:text-2xl font-bold text-red-700">ROYAL TRUST BD</a>
-            </div>
+            <!-- লোগো - আপডেটেড -->
+            <a href="#home" class="logo-container">
+               <div >
+    <img src="/images/Jahirul-01.png" alt="Logo" width="40">
+</div>
+                <div class="logo-text">
+                    <span class="logo-main">ROYAL TRUST BD</span>
+                    <span class="logo-sub">প্রিমিয়াম কালেকশন</span>
+                </div>
+            </a>
             
+            <!-- ডেস্কটপ মেনু -->
             <div class="desktop-menu hidden md:flex items-center">
                 <a href="#home" class="nav-link active">হোম</a>
                 <a href="#products" class="nav-link">পণ্য</a>
@@ -402,32 +581,55 @@
                 </a>
             </div>
             
-            <div class="hamburger md:hidden" id="hamburger">
-                <span></span><span></span><span></span>
+            <!-- মোবাইল হ্যামবার্গার কন্টেইনার - আপডেটেড -->
+            <div class="hamburger-container">
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
             </div>
         </div>
         
+        <!-- মোবাইল মেনু - আপডেটেড -->
         <div class="mobile-menu" id="mobileMenu">
-            <a href="#home" class="nav-link active">হোম</a>
-            <a href="#products" class="nav-link">পণ্য</a>
-            <a href="#order" class="nav-link">অর্ডার</a>
-            <a href="#reviews" class="nav-link">রিভিউ</a>
-            <a href="#contact" class="nav-link">যোগাযোগ</a>
-            <div class="p-4">
-                <a href="tel:01911465879" class="block bg-red-600 hover:bg-red-700 text-white py-3 px-4 rounded-full text-center">
-                    <i class="fas fa-phone-alt mr-2"></i>কল করুন: 01911465879
-                </a>
-            </div>
+            <a href="#home" class="nav-link active">
+                <i class="fas fa-home"></i>
+                হোম
+            </a>
+            <a href="#products" class="nav-link">
+                <i class="fas fa-tshirt"></i>
+                পণ্য
+            </a>
+            <a href="#order" class="nav-link">
+                <i class="fas fa-shopping-cart"></i>
+                অর্ডার
+            </a>
+            <a href="#reviews" class="nav-link">
+                <i class="fas fa-star"></i>
+                রিভিউ
+            </a>
+            <a href="#contact" class="nav-link">
+                <i class="fas fa-phone"></i>
+                যোগাযোগ
+            </a>
+            <a href="tel:01911465879" class="mobile-call-btn">
+                <i class="fas fa-phone-alt"></i>
+                কল করুন: ০১৯১১৪৬৫৮৭৯
+            </a>
         </div>
     </div>
 </nav>
+
+<!-- মেনু ওভারলে -->
+<div class="menu-overlay" id="menuOverlay"></div>
 
 <!-- হোয়াটসঅ্যাপ বাটন -->
 <a href="https://wa.me/8801911465879" target="_blank" class="whatsapp-float" id="whatsapp-btn">
     <i class="fab fa-whatsapp"></i>
 </a>
 
-<!-- হিরো স্লাইডার - আপডেটেড -->
+<!-- হিরো স্লাইডার -->
 <section class="relative overflow-hidden" id="home">
     <div class="hero-slider-container">
         <div id="slider-container"></div>
@@ -452,7 +654,7 @@
     </div>
 </section>
 
-<!-- পণ্য সেকশন (আগের মতোই) -->
+<!-- পণ্য সেকশন -->
 <section class="py-16 bg-white" id="products">
     <div class="container mx-auto px-4">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-8" id="home-page-title">আমাদের কালেকশন</h2>
@@ -474,7 +676,7 @@
     </div>
 </section>
 
-<!-- অর্ডার ফর্ম (আগের মতোই) -->
+<!-- অর্ডার ফর্ম -->
 <section class="py-16 bg-gradient-to-r from-gray-100 to-gray-200" id="order">
     <div class="container mx-auto px-4">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-12" id="order-form-title">পণ্য অর্ডার ফর্ম</h2>
@@ -541,7 +743,7 @@
     </div>
 </section>
 
-<!-- রিভিউ সেকশন (আগের মতোই) -->
+<!-- রিভিউ সেকশন -->
 <section class="py-16 bg-white" id="reviews">
     <div class="container mx-auto px-4">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-12">গ্রাহকদের রিভিউ</h2>
@@ -595,7 +797,7 @@
     </div>
 </section>
 
-<!-- ফুটার (আগের মতোই) -->
+<!-- ফুটার -->
 <footer class="bg-gradient-to-r from-gray-900 to-black text-white py-12" id="contact">
     <div class="container mx-auto px-4">
         <div class="flex flex-col md:flex-row justify-between items-center">
@@ -618,7 +820,7 @@
     </div>
 </footer>
 
-<!-- মডাল (আগের মতোই) -->
+<!-- মডাল -->
 <div id="order-success-modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
     <div class="bg-white rounded-xl p-8 max-w-md mx-4">
         <div class="text-center">
@@ -666,7 +868,98 @@
         loadAllData();
         setupUI();
         setupCategoryTabs();
+        setupMobileMenu(); // মোবাইল মেনু সেটআপ
     });
+    
+    // ============================================
+    // মোবাইল মেনু ফাংশন - নতুন যোগ করা
+    // ============================================
+    
+    function setupMobileMenu() {
+        const hamburger = document.getElementById('hamburger');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const overlay = document.getElementById('menuOverlay');
+        const navLinks = document.querySelectorAll('.mobile-menu .nav-link');
+        
+        function toggleMenu(show) {
+            hamburger.classList.toggle('active', show);
+            mobileMenu.classList.toggle('active', show);
+            overlay.classList.toggle('active', show);
+            
+            // স্ক্রোল বন্ধ/চালু
+            document.body.style.overflow = show ? 'hidden' : '';
+            
+            if (show) {
+                document.body.style.position = 'fixed';
+                document.body.style.width = '100%';
+            } else {
+                document.body.style.position = '';
+                document.body.style.width = '';
+            }
+        }
+        
+        // হ্যামবার্গার ক্লিক
+        hamburger.addEventListener('click', function(e) {
+            e.stopPropagation();
+            const isActive = mobileMenu.classList.contains('active');
+            toggleMenu(!isActive);
+        });
+        
+        // ওভারলে ক্লিক
+        overlay.addEventListener('click', function() {
+            toggleMenu(false);
+        });
+        
+        // মোবাইল মেনুর লিংক ক্লিক
+        navLinks.forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // অ্যাক্টিভ ক্লাস আপডেট
+                navLinks.forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                // স্ক্রল টু সেকশন
+                const id = this.getAttribute('href');
+                if (id?.startsWith('#')) {
+                    const el = document.querySelector(id);
+                    if (el) {
+                        toggleMenu(false);
+                        setTimeout(() => {
+                            window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+                        }, 300);
+                    }
+                }
+            });
+        });
+        
+        // রিসাইজ ইভেন্ট
+        window.addEventListener('resize', function() {
+            if (window.innerWidth > 768) {
+                toggleMenu(false);
+                document.body.style.overflow = '';
+                document.body.style.position = '';
+            }
+        });
+        
+        // ডেস্কটপ মেনুর লিংক ক্লিক
+        document.querySelectorAll('.desktop-menu .nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                document.querySelectorAll('.desktop-menu .nav-link').forEach(l => l.classList.remove('active'));
+                this.classList.add('active');
+                
+                const id = this.getAttribute('href');
+                if (id?.startsWith('#')) {
+                    const el = document.querySelector(id);
+                    if (el) {
+                        window.scrollTo({ top: el.offsetTop - 70, behavior: 'smooth' });
+                    }
+                }
+            });
+        });
+    }
     
     // ============================================
     // ডেটা লোড ফাংশন
@@ -808,7 +1101,7 @@
     }
     
     // ============================================
-    // UI আপডেট ফাংশন - আপডেটেড
+    // UI আপডেট ফাংশন
     // ============================================
     
     function loadSlidersUI(sliders) {
@@ -965,17 +1258,14 @@
             startAutoSlide();
         }
         
-        // ইভেন্ট লিসেনার রিমুভ এবং আবার যোগ করুন
         const prevBtn = document.getElementById('prev-slide');
         const nextBtn = document.getElementById('next-slide');
         
-        // পুরনো লিসেনার রিমুভ
         const newPrevBtn = prevBtn.cloneNode(true);
         const newNextBtn = nextBtn.cloneNode(true);
         prevBtn.parentNode.replaceChild(newPrevBtn, prevBtn);
         nextBtn.parentNode.replaceChild(newNextBtn, nextBtn);
         
-        // নতুন লিসেনার যোগ
         document.getElementById('prev-slide').addEventListener('click', () => { 
             prevSlide(); 
             resetProgress(); 
@@ -986,7 +1276,6 @@
             resetProgress(); 
         });
         
-        // ইন্ডিকেটর আপডেট
         indicators.forEach((ind, i) => {
             ind.removeEventListener('click', ind.clickHandler);
             ind.clickHandler = () => { goToSlide(i); resetProgress(); };
@@ -1005,7 +1294,6 @@
         
         startAutoSlide();
         
-        // রিসাইজ ইভেন্ট
         window.addEventListener('resize', function() {
             slides = document.querySelectorAll('.hero-slide');
             indicators = document.querySelectorAll('.slider-indicator');
@@ -1015,7 +1303,6 @@
         });
     }
     
-    // অন্যান্য ফাংশন (আগের মতোই)
     function updateWebsiteSettingsUI() {
         const whatsappNumber = websiteSettings.whatsappNumber || '01911465879';
         document.getElementById('whatsapp-number').textContent = whatsappNumber;
@@ -1205,41 +1492,12 @@
     }
     
     function setupUI() {
-        document.getElementById('hamburger').addEventListener('click', function() {
-            this.classList.toggle('active');
-            document.getElementById('mobileMenu').classList.toggle('active');
-        });
-        
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', function(e) {
-                e.preventDefault();
-                document.getElementById('hamburger')?.classList.remove('active');
-                document.getElementById('mobileMenu')?.classList.remove('active');
-                
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                this.classList.add('active');
-                
-                const id = this.getAttribute('href');
-                if (id?.startsWith('#')) {
-                    const el = document.querySelector(id);
-                    if (el) window.scrollTo({ top: el.offsetTop - 60, behavior: 'smooth' });
-                }
-            });
-        });
-        
-        window.addEventListener('scroll', () => {
-            const sections = document.querySelectorAll('section, footer');
-            let current = '';
-            const pos = window.scrollY + 100;
-            
-            sections.forEach(s => {
-                if (pos >= s.offsetTop && pos < s.offsetTop + s.clientHeight) {
-                    current = '#' + s.id;
-                }
-            });
-            
-            document.querySelectorAll('.nav-link').forEach(l => {
-                l.classList.toggle('active', l.getAttribute('href') === current);
+        document.querySelectorAll('.add-to-order').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const id = this.dataset.id;
+                document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+                document.getElementById('product-select').value = id;
+                document.getElementById('product-select').dispatchEvent(new Event('change', { bubbles: true }));
             });
         });
         
