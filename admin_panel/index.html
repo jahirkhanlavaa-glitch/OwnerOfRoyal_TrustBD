@@ -3731,122 +3731,180 @@ input:checked + .slider:before {
         });
     }
     
-    // ============================================
-    // পণ্য পেজ
-    // ============================================
-    async function loadProductsPage() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/products`);
-            const products = await response.json();
-            
-            const categoriesResponse = await fetch(`${API_BASE_URL}/api/admin/categories`);
-            categories = await categoriesResponse.json();
-            
-            const contentArea = document.getElementById('content-area');
-            
-            contentArea.innerHTML = `
-                <div class="bg-white rounded-xl border border-gray-200">
-                    <div class="p-6 border-b border-gray-200 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-                        <div>
-                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                <i class="fas fa-tshirt mr-3 text-blue-600"></i>
-                                পণ্য তালিকা
-                            </h3>
-                            <p class="text-gray-600 text-sm mt-1">মোট ${products.length} টি পণ্য</p>
-                        </div>
-                        <div class="flex space-x-3">
-                            <button onclick="loadProductsPage()" class="btn btn-outline">
-                                <i class="fas fa-sync mr-2"></i>
-                                রিফ্রেশ
-                            </button>
-                            <button onclick="showAddProductModal()" class="btn btn-primary">
-                                <i class="fas fa-plus mr-2"></i>
-                                নতুন পণ্য
-                            </button>
-                        </div>
+   // ============================================
+// পণ্য পেজ - মোবাইল কার্ড সহ
+// ============================================
+async function loadProductsPage() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/products`);
+        const productsData = await response.json();
+        products = productsData;
+        
+        const categoriesResponse = await fetch(`${API_BASE_URL}/api/admin/categories`);
+        categories = await categoriesResponse.json();
+        
+        const contentArea = document.getElementById('content-area');
+        
+        // মোবাইল কার্ড জেনারেট করুন
+        const mobileProductCards = products.length > 0 ? 
+            products.map(product => generateMobileProductCard(product)).join('') : 
+            '<div class="text-center p-8 text-gray-500">কোনো পণ্য নেই</div>';
+        
+        contentArea.innerHTML = `
+            <div id="products-page" class="bg-white rounded-xl border border-gray-200">
+                <!-- Header -->
+                <div class="p-6 border-b border-gray-200 flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                    <div>
+                        <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                            <i class="fas fa-tshirt mr-3 text-blue-600"></i>
+                            পণ্য তালিকা
+                        </h3>
+                        <p class="text-gray-600 text-sm mt-1">মোট ${products.length} টি পণ্য</p>
                     </div>
-                    
-                    <div class="p-6">
-                        <div class="overflow-x-auto">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>ছবি</th>
-                                        <th>পণ্য</th>
-                                        <th>ক্যাটাগরি</th>
-                                        <th>দাম</th>
-                                        <th>ছাড়</th>
-                                        <th>স্ট্যাটাস</th>
-                                        <th>ক্রিয়া</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    ${products.length > 0 ? 
-                                        products.map(product => {
-                                            const category = categories.find(c => c._id === product.categoryId) || { banglaName: product.categoryBangla || product.category };
-                                            const image = product.colors?.[0]?.image || 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=200';
-                                            return `
-                                                <tr>
-                                                    <td>
-                                                        <img src="${image}" alt="${product.name}" 
-                                                             class="w-16 h-16 object-cover rounded-lg border border-gray-200">
-                                                    </td>
-                                                    <td>
-                                                        <div class="font-medium">${product.banglaName || product.name}</div>
-                                                        <div class="text-xs text-gray-500">${product.name}</div>
-                                                    </td>
-                                                    <td>${category.banglaName || product.categoryBangla || product.category}</td>
-                                                    <td>
-                                                        <span class="line-through text-gray-400 text-xs">${product.regularPrice}৳</span>
-                                                        <span class="text-red-600 font-bold block">${product.offerPrice}৳</span>
-                                                    </td>
-                                                    <td>
-                                                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-bold">
-                                                            ${product.offerPercentage}% OFF
-                                                        </span>
-                                                    </td>
-                                                    <td>
-                                                        <span class="status-badge ${product.isActive ? 'badge-success' : 'badge-danger'}">
-                                                            ${product.isActive ? 'সক্রিয়' : 'নিষ্ক্রিয়'}
-                                                        </span>
-                                                        ${product.isFeatured ? '<span class="ml-1 text-yellow-500"><i class="fas fa-star"></i></span>' : ''}
-                                                    </td>
-                                                    <td>
-                                                        <div class="flex space-x-2">
-                                                            <button onclick="editProduct('${product._id}')" 
-                                                                    class="text-blue-600 hover:text-blue-800 p-2"
-                                                                    title="এডিট">
-                                                                <i class="fas fa-edit"></i>
-                                                            </button>
-                                                            <button onclick="deleteProduct('${product._id}')" 
-                                                                    class="text-red-600 hover:text-red-800 p-2"
-                                                                    title="ডিলিট">
-                                                                <i class="fas fa-trash"></i>
-                                                            </button>
-                                                        </div>
-                                                    </td>
-                                                </tr>
-                                            `;
-                                        }).join('') : 
-                                        `<tr><td colspan="7" class="p-12 text-center text-gray-500">কোনো পণ্য নেই</td></tr>`
-                                    }
-                                </tbody>
-                            </table>
-                        </div>
+                    <div class="flex space-x-3">
+                        <button onclick="loadProductsPage()" class="btn btn-outline">
+                            <i class="fas fa-sync mr-2"></i> রিফ্রেশ
+                        </button>
+                        <button onclick="showAddProductModal()" class="btn btn-primary">
+                            <i class="fas fa-plus mr-2"></i> নতুন পণ্য
+                        </button>
                     </div>
                 </div>
-            `;
-            
-            // Store products globally
-            window.products = products;
-            window.categories = categories;
-            
-        } catch (error) {
-            console.error('Products page error:', error);
-            throw error;
-        }
+                
+                <!-- Desktop Table View (লুকানো থাকবে মোবাইলে) -->
+                <div class="p-6 desktop-only">
+                    <div class="overflow-x-auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>ছবি</th>
+                                    <th>পণ্য</th>
+                                    <th>ক্যাটাগরি</th>
+                                    <th>দাম</th>
+                                    <th>ছাড়</th>
+                                    <th>স্ট্যাটাস</th>
+                                    <th>ক্রিয়া</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                ${products.length > 0 ? 
+                                    products.map(product => {
+                                        const category = categories.find(c => c._id === product.categoryId) || { banglaName: product.categoryBangla || product.category };
+                                        const image = product.colors?.[0]?.image || 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=200';
+                                        return `
+                                            <tr>
+                                                <td><img src="${image}" class="w-16 h-16 object-cover rounded-lg"></td>
+                                                <td>
+                                                    <div class="font-medium">${product.banglaName || product.name}</div>
+                                                    <div class="text-xs text-gray-500">${product.name}</div>
+                                                </td>
+                                                <td>${category.banglaName || product.categoryBangla || product.category}</td>
+                                                <td>
+                                                    <span class="line-through text-gray-400 text-xs">${product.regularPrice}৳</span>
+                                                    <span class="text-red-600 font-bold block">${product.offerPrice}৳</span>
+                                                </td>
+                                                <td><span class="bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs font-bold">${product.offerPercentage}%</span></td>
+                                                <td>
+                                                    <span class="status-badge ${product.isActive ? 'badge-success' : 'badge-danger'}">${product.isActive ? 'সক্রিয়' : 'নিষ্ক্রিয়'}</span>
+                                                    ${product.isFeatured ? '<span class="ml-1 text-yellow-500"><i class="fas fa-star"></i></span>' : ''}
+                                                </td>
+                                                <td>
+                                                    <div class="flex space-x-2">
+                                                        <button onclick="editProduct('${product._id}')" class="text-blue-600 hover:text-blue-800 p-2" title="এডিট"><i class="fas fa-edit"></i></button>
+                                                        <button onclick="deleteProduct('${product._id}')" class="text-red-600 hover:text-red-800 p-2" title="ডিলিট"><i class="fas fa-trash"></i></button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                        `;
+                                    }).join('') : 
+                                    `<tr><td colspan="7" class="p-8 text-center text-gray-500">কোনো পণ্য নেই</td></tr>`
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Mobile Card View -->
+                <div class="mobile-product-grid p-4">
+                    ${mobileProductCards}
+                </div>
+            </div>
+        `;
+        
+        window.products = products;
+        window.categories = categories;
+        
+    } catch (error) {
+        console.error('Products page error:', error);
+        throw error;
     }
+}
+
+// ============================================
+// মোবাইল প্রোডাক্ট কার্ড জেনারেটর
+// ============================================
+function generateMobileProductCard(product) {
+    const category = categories.find(c => c._id === product.categoryId) || { banglaName: product.categoryBangla || product.category };
+    const image = product.colors?.[0]?.image || 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=200';
     
+    return `
+        <div class="product-card-mobile">
+            <div class="product-card-header">
+                <img src="${image}" alt="${product.name}" class="product-image">
+                <div class="product-info">
+                    <div class="product-name-bn">${product.banglaName || product.name}</div>
+                    <div class="product-name-en">${product.name}</div>
+                    <span class="product-category">${category.banglaName || product.categoryBangla || product.category}</span>
+                    <div class="product-price-section">
+                        <span class="product-offer-price">${product.offerPrice}৳</span>
+                        <span class="product-regular-price">${product.regularPrice}৳</span>
+                        <span class="product-discount">-${product.offerPercentage}%</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="product-card-body">
+                ${product.colors && product.colors.length > 0 ? `
+                    <div class="product-colors">
+                        <div class="color-title"><i class="fas fa-palette mr-1"></i> রংসমূহ</div>
+                        <div class="color-list">
+                            ${product.colors.slice(0, 3).map(color => `
+                                <div class="color-item">
+                                    <span class="color-dot" style="background-color: ${color.code}"></span>
+                                    <span class="color-name">${color.banglaName || color.name}</span>
+                                </div>
+                            `).join('')}
+                            ${product.colors.length > 3 ? `<span class="text-xs text-gray-500 ml-1">+${product.colors.length - 3}</span>` : ''}
+                        </div>
+                    </div>
+                ` : ''}
+                
+                <div class="product-size">
+                    <div class="size-title"><i class="fas fa-ruler mr-1"></i> সাইজ</div>
+                    <div class="size-chips">
+                        ${product.size.split(',').map(s => `<span class="size-chip">${s.trim()}</span>`).join('')}
+                    </div>
+                </div>
+                
+                <div class="product-status">
+                    <span class="status-indicator ${product.isActive ? 'status-active' : 'status-inactive'}"></span>
+                    <span class="text-sm font-medium">${product.isActive ? 'সক্রিয়' : 'নিষ্ক্রিয়'}</span>
+                    ${product.isFeatured ? '<span class="ml-2 text-yellow-500"><i class="fas fa-star"></i> ফিচার্ড</span>' : ''}
+                    ${product.isNewArrival ? '<span class="ml-2 text-green-500"><i class="fas fa-clock"></i> নতুন</span>' : ''}
+                </div>
+                
+                <div class="product-actions">
+                    <button onclick="editProduct('${product._id}')" class="product-edit-btn">
+                        <i class="fas fa-edit"></i> সম্পাদনা
+                    </button>
+                    <button onclick="deleteProduct('${product._id}')" class="product-delete-btn">
+                        <i class="fas fa-trash"></i> ডিলিট
+                    </button>
+                </div>
+            </div>
+        </div>
+    `;
+}
     // ============================================
     // ক্যাটাগরি পেজ
     // ============================================
@@ -3927,154 +3985,229 @@ input:checked + .slider:before {
         }
     }
     
-    // ============================================
-    // অর্ডার পেজ
-    // ============================================
-    async function loadOrdersPage() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/orders`);
-            const data = await response.json();
-            orders = data.orders || [];
-            
-            const contentArea = document.getElementById('content-area');
-            
-            contentArea.innerHTML = `
-                <div class="bg-white rounded-xl border border-gray-200">
-                    <div class="p-6 border-b border-gray-200">
-                        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                    <i class="fas fa-shopping-cart mr-3 text-green-600"></i>
-                                    অর্ডার ব্যবস্থাপনা
-                                </h3>
-                                <p class="text-gray-600 text-sm mt-1">মোট ${orders.length} টি অর্ডার</p>
-                            </div>
-                            <div class="flex space-x-3">
-                                <select id="order-status-filter" class="form-input w-48" onchange="filterOrders()">
-                                    <option value="">সব অর্ডার</option>
-                                    <option value="pending">পেন্ডিং</option>
-                                    <option value="confirmed">কনফার্মড</option>
-                                    <option value="processing">প্রসেসিং</option>
-                                    <option value="shipped">শিপড</option>
-                                    <option value="delivered">ডেলিভার্ড</option>
-                                    <option value="cancelled">ক্যান্সেলড</option>
-                                </select>
-                                <input type="text" id="order-search" class="form-input w-48" placeholder="অর্ডার আইডি, ফোন..." onkeyup="filterOrders()">
-                                <button onclick="loadOrdersPage()" class="btn btn-outline">
-                                    <i class="fas fa-sync mr-2"></i>
-                                    রিফ্রেশ
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="p-6">
-                        <div class="overflow-x-auto">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>অর্ডার আইডি</th>
-                                        <th>গ্রাহক</th>
-                                        <th>পণ্য</th>
-                                        <th>পরিমাণ</th>
-                                        <th>মোট</th>
-                                        <th>স্ট্যাটাস</th>
-                                        <th>তারিখ</th>
-                                        <th>ক্রিয়া</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="orders-table-body">
-                                    ${orders.length > 0 ? 
-                                        orders.map(order => `
-                                            <tr>
-                                                <td class="font-mono text-sm">${order.orderId}</td>
-                                                <td>
-                                                    <div class="font-medium">${order.customerName}</div>
-                                                    <div class="text-xs text-gray-500">${order.phone}</div>
-                                                </td>
-                                                <td>${order.productName}</td>
-                                                <td>${order.quantity} পিস</td>
-                                                <td>${order.grandTotal || order.totalPrice}৳</td>
-                                                <td>
-                                                    <span class="status-badge status-${order.status}">
-                                                        ${getStatusText(order.status)}
-                                                    </span>
-                                                </td>
-                                                <td>${formatDate(order.createdAt)}</td>
-                                                <td>
-                                                    <button onclick="viewOrder('${order._id}')" 
-                                                            class="text-blue-600 hover:text-blue-800 p-2">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        `).join('') : 
-                                        `<tr><td colspan="8" class="p-8 text-center text-gray-500">কোনো অর্ডার নেই</td></tr>`
-                                    }
-                                </tbody>
-                            </table>
+  // ============================================
+// অর্ডার পেজ - মোবাইল কার্ড সহ
+// ============================================
+async function loadOrdersPage() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/orders`);
+        const data = await response.json();
+        orders = data.orders || [];
+        
+        const contentArea = document.getElementById('content-area');
+        
+        // মোবাইল অর্ডার কার্ড জেনারেট করুন
+        const mobileOrderCards = orders.length > 0 ? 
+            orders.map(order => generateMobileOrderCard(order)).join('') : 
+            '<div class="text-center p-8 text-gray-500">কোনো অর্ডার নেই</div>';
+        
+        contentArea.innerHTML = `
+            <div id="orders-page" class="bg-white rounded-xl border border-gray-200">
+                <!-- Header -->
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-shopping-cart mr-3 text-green-600"></i>
+                                অর্ডার ব্যবস্থাপনা
+                            </h3>
+                            <p class="text-gray-600 text-sm mt-1">মোট ${orders.length} টি অর্ডার</p>
                         </div>
                     </div>
                 </div>
-            `;
+                
+                <!-- Filter Section (মোবাইলেও দেখাবে) -->
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <select id="order-status-filter" class="form-input w-full md:w-48" onchange="filterOrders()">
+                            <option value="">সব অর্ডার</option>
+                            <option value="pending">পেন্ডিং</option>
+                            <option value="confirmed">কনফার্মড</option>
+                            <option value="processing">প্রসেসিং</option>
+                            <option value="shipped">শিপড</option>
+                            <option value="delivered">ডেলিভার্ড</option>
+                            <option value="cancelled">ক্যান্সেলড</option>
+                        </select>
+                        <input type="text" id="order-search" class="form-input w-full md:w-64" placeholder="অর্ডার আইডি, ফোন, নাম..." onkeyup="filterOrders()">
+                        <button onclick="loadOrdersPage()" class="btn btn-outline w-full md:w-auto">
+                            <i class="fas fa-sync mr-2"></i> রিফ্রেশ
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Desktop Table View -->
+                <div class="p-6 desktop-only">
+                    <div class="overflow-x-auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>অর্ডার আইডি</th>
+                                    <th>গ্রাহক</th>
+                                    <th>পণ্য</th>
+                                    <th>পরিমাণ</th>
+                                    <th>মোট</th>
+                                    <th>স্ট্যাটাস</th>
+                                    <th>তারিখ</th>
+                                    <th>ক্রিয়া</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                ${orders.map(order => `
+                                    <tr>
+                                        <td class="font-mono text-sm">${order.orderId}</td>
+                                        <td>
+                                            <div class="font-medium">${order.customerName}</div>
+                                            <div class="text-xs text-gray-500">${order.phone}</div>
+                                        </td>
+                                        <td>${order.productName}</td>
+                                        <td>${order.quantity} পিস</td>
+                                        <td>${order.grandTotal || order.totalPrice}৳</td>
+                                        <td><span class="status-badge status-${order.status}">${getStatusText(order.status)}</span></td>
+                                        <td>${formatDate(order.createdAt)}</td>
+                                        <td>
+                                            <button onclick="viewOrder('${order._id}')" class="text-blue-600 hover:text-blue-800 p-2">
+                                                <i class="fas fa-eye"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                `).join('')}
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Mobile Card View -->
+                <div class="mobile-orders-grid p-4" id="mobile-orders-container">
+                    ${mobileOrderCards}
+                </div>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Orders page error:', error);
+        throw error;
+    }
+}
+
+// ============================================
+// মোবাইল অর্ডার কার্ড জেনারেটর
+// ============================================
+function generateMobileOrderCard(order) {
+    const statusColors = {
+        'pending': 'status-pending',
+        'confirmed': 'status-confirmed',
+        'processing': 'status-processing',
+        'shipped': 'status-shipped',
+        'delivered': 'status-delivered',
+        'cancelled': 'status-cancelled'
+    };
+    
+    return `
+        <div class="mobile-order-card">
+            <div class="mobile-order-header">
+                <span class="mobile-order-id">#${order.orderId}</span>
+                <span class="mobile-order-status ${statusColors[order.status] || 'status-pending'}">
+                    ${getStatusText(order.status)}
+                </span>
+            </div>
             
-        } catch (error) {
-            console.error('Orders page error:', error);
-            throw error;
-        }
+            <div class="mobile-order-body">
+                <div class="mobile-order-detail">
+                    <div class="mobile-order-icon"><i class="fas fa-user"></i></div>
+                    <div class="mobile-order-info">
+                        <div class="mobile-order-label">গ্রাহকের নাম</div>
+                        <div class="mobile-order-value">${order.customerName}</div>
+                        <div class="mobile-order-sub">${order.phone}</div>
+                    </div>
+                </div>
+                
+                <div class="mobile-order-detail">
+                    <div class="mobile-order-icon"><i class="fas fa-map-marker-alt"></i></div>
+                    <div class="mobile-order-info">
+                        <div class="mobile-order-label">ঠিকানা</div>
+                        <div class="mobile-order-sub">${order.address || 'N/A'}</div>
+                    </div>
+                </div>
+                
+                <div class="mobile-order-detail">
+                    <div class="mobile-order-icon"><i class="fas fa-tshirt"></i></div>
+                    <div class="mobile-order-info">
+                        <div class="mobile-order-label">পণ্য</div>
+                        <div class="mobile-order-value">${order.productName}</div>
+                        <div class="mobile-order-sub">
+                            ${order.color} | ${order.size} | ${order.quantity} পিস
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mobile-order-price">
+                    ${order.grandTotal || order.totalPrice}৳
+                </div>
+            </div>
+            
+            <div class="mobile-order-footer">
+                <button onclick="viewOrder('${order._id}')" class="mobile-view-btn">
+                    <i class="fas fa-eye"></i> বিস্তারিত দেখুন
+                </button>
+            </div>
+        </div>
+    `;
+}
+// ============================================
+// অর্ডার ফিল্টার - মোবাইল কার্ড আপডেট সহ
+// ============================================
+function filterOrders() {
+    const statusFilter = document.getElementById('order-status-filter').value;
+    const searchText = document.getElementById('order-search').value.toLowerCase();
+    
+    let filtered = orders;
+    
+    if (statusFilter) {
+        filtered = filtered.filter(order => order.status === statusFilter);
     }
     
-    // ============================================
-    // অর্ডার ফিল্টার
-    // ============================================
-    function filterOrders() {
-        const statusFilter = document.getElementById('order-status-filter').value;
-        const searchText = document.getElementById('order-search').value.toLowerCase();
-        
-        let filtered = orders;
-        
-        if (statusFilter) {
-            filtered = filtered.filter(order => order.status === statusFilter);
-        }
-        
-        if (searchText) {
-            filtered = filtered.filter(order => 
-                (order.orderId && order.orderId.toLowerCase().includes(searchText)) ||
-                (order.customerName && order.customerName.toLowerCase().includes(searchText)) ||
-                (order.phone && order.phone.includes(searchText))
-            );
-        }
-        
-        const tbody = document.getElementById('orders-table-body');
-        if (tbody) {
-            tbody.innerHTML = filtered.length > 0 ? 
-                filtered.map(order => `
-                    <tr>
-                        <td class="font-mono text-sm">${order.orderId}</td>
-                        <td>
-                            <div class="font-medium">${order.customerName}</div>
-                            <div class="text-xs text-gray-500">${order.phone}</div>
-                        </td>
-                        <td>${order.productName}</td>
-                        <td>${order.quantity} পিস</td>
-                        <td>${order.grandTotal || order.totalPrice}৳</td>
-                        <td>
-                            <span class="status-badge status-${order.status}">
-                                ${getStatusText(order.status)}
-                            </span>
-                        </td>
-                        <td>${formatDate(order.createdAt)}</td>
-                        <td>
-                            <button onclick="viewOrder('${order._id}')" class="text-blue-600 hover:text-blue-800 p-2">
-                                <i class="fas fa-eye"></i>
-                            </button>
-                        </td>
-                    </tr>
-                `).join('') : 
-                '<tr><td colspan="8" class="p-8 text-center text-gray-500">কোনো অর্ডার পাওয়া যায়নি</td></tr>';
-        }
+    if (searchText) {
+        filtered = filtered.filter(order => 
+            (order.orderId && order.orderId.toLowerCase().includes(searchText)) ||
+            (order.customerName && order.customerName.toLowerCase().includes(searchText)) ||
+            (order.phone && order.phone.includes(searchText))
+        );
     }
     
+    // Desktop Table Update
+    const tableBody = document.getElementById('orders-table-body');
+    if (tableBody) {
+        tableBody.innerHTML = filtered.length > 0 ? 
+            filtered.map(order => `
+                <tr>
+                    <td class="font-mono text-sm">${order.orderId}</td>
+                    <td>
+                        <div class="font-medium">${order.customerName}</div>
+                        <div class="text-xs text-gray-500">${order.phone}</div>
+                    </td>
+                    <td>${order.productName}</td>
+                    <td>${order.quantity} পিস</td>
+                    <td>${order.grandTotal || order.totalPrice}৳</td>
+                    <td><span class="status-badge status-${order.status}">${getStatusText(order.status)}</span></td>
+                    <td>${formatDate(order.createdAt)}</td>
+                    <td>
+                        <button onclick="viewOrder('${order._id}')" class="text-blue-600 hover:text-blue-800 p-2">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('') : 
+            '<tr><td colspan="8" class="p-8 text-center text-gray-500">কোনো অর্ডার পাওয়া যায়নি</td></tr>';
+    }
+    
+    // Mobile Cards Update
+    const mobileContainer = document.getElementById('mobile-orders-container');
+    if (mobileContainer) {
+        mobileContainer.innerHTML = filtered.length > 0 ? 
+            filtered.map(order => generateMobileOrderCard(order)).join('') : 
+            '<div class="text-center p-8 text-gray-500">কোনো অর্ডার পাওয়া যায়নি</div>';
+    }
+}
     // ============================================
     // অর্ডার দেখা
     // ============================================
