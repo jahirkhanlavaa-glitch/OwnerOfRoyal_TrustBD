@@ -1514,7 +1514,809 @@ input:checked + .slider:before {
         font-size: 12px !important;
     }
 }
-    </style>
+
+
+/* ============================================ */
+/* মোবাইল ড্যাশবোর্ড - সম্পূর্ণ রিডিজাইন */
+/* ============================================ */
+@media (max-width: 640px) {
+    
+    /* ========== ড্যাশবোর্ড কার্ড ========== */
+    .dashboard-stats .grid,
+    .grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 {
+        display: block !important;
+    }
+    
+    .stat-card {
+        width: 100% !important;
+        margin-bottom: 12px !important;
+        padding: 16px !important;
+        display: flex !important;
+        flex-direction: column !important;
+    }
+    
+    .stat-card .flex {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        width: 100% !important;
+    }
+    
+    .stat-card .text-3xl {
+        font-size: 28px !important;
+        font-weight: 700 !important;
+    }
+    
+    .stat-card .text-sm {
+        font-size: 13px !important;
+    }
+    
+    .stat-icon {
+        width: 52px !important;
+        height: 52px !important;
+        border-radius: 14px !important;
+    }
+    
+    .stat-icon i {
+        font-size: 24px !important;
+    }
+    
+    .border-t {
+        margin-top: 12px !important;
+        padding-top: 12px !important;
+    }
+    
+    /* ========== চার্ট ========== */
+    .grid-cols-1.lg\:grid-cols-2 {
+        display: block !important;
+    }
+    
+    .bg-white.rounded-xl.p-6 {
+        padding: 16px !important;
+        margin-bottom: 16px !important;
+    }
+    
+    canvas {
+        max-height: 200px !important;
+        width: 100% !important;
+    }
+    
+    /* ========== সাম্প্রতিক অর্ডার ========== */
+    .bg-white.rounded-xl.border.border-gray-200.mb-8 {
+        margin-bottom: 20px !important;
+    }
+    
+    .p-6.border-b {
+        padding: 16px !important;
+    }
+    
+    .p-6 {
+        padding: 16px !important;
+    }
+    
+    /* অর্ডার টেবিল - কার্ড ভিউ */
+    .data-table {
+        display: none !important;
+    }
+    
+    .mobile-order-cards {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+    
+    .order-card {
+        background: white !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 16px !important;
+        padding: 16px !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02) !important;
+    }
+    
+    .order-card-header {
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-bottom: 12px !important;
+    }
+    
+    .order-id {
+        font-family: monospace !important;
+        font-size: 15px !important;
+        font-weight: 700 !important;
+        color: #dc2626 !important;
+        background: #fee2e2 !important;
+        padding: 6px 12px !important;
+        border-radius: 20px !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    .order-status-badge {
+        font-size: 12px !important;
+        padding: 6px 14px !important;
+        border-radius: 20px !important;
+        font-weight: 600 !important;
+        text-transform: uppercase !important;
+    }
+    
+    .order-card-body {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 10px !important;
+        margin-bottom: 16px !important;
+    }
+    
+    .order-info-row {
+        display: flex !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+    }
+    
+    .order-info-icon {
+        width: 32px !important;
+        height: 32px !important;
+        background: #f1f5f9 !important;
+        border-radius: 10px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: #64748b !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .order-info-content {
+        flex: 1 !important;
+    }
+    
+    .order-info-label {
+        font-size: 12px !important;
+        color: #64748b !important;
+        margin-bottom: 2px !important;
+    }
+    
+    .order-info-value {
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        color: #0f172a !important;
+    }
+    
+    .order-customer {
+        font-weight: 700 !important;
+        color: #0f172a !important;
+    }
+    
+    .order-phone {
+        font-size: 13px !important;
+        color: #64748b !important;
+    }
+    
+    .order-product {
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        color: #0f172a !important;
+    }
+    
+    .order-price {
+        font-size: 18px !important;
+        font-weight: 700 !important;
+        color: #dc2626 !important;
+    }
+    
+    .order-date {
+        font-size: 12px !important;
+        color: #64748b !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 4px !important;
+    }
+    
+    .order-card-footer {
+        display: flex !important;
+        justify-content: flex-end !important;
+        padding-top: 12px !important;
+        border-top: 1px solid #e2e8f0 !important;
+    }
+    
+    .view-order-btn {
+        background: #dc2626 !important;
+        color: white !important;
+        padding: 10px 20px !important;
+        border-radius: 12px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        width: 100% !important;
+        justify-content: center !important;
+        border: none !important;
+        cursor: pointer !important;
+    }
+    
+    .view-order-btn i {
+        font-size: 14px !important;
+    }
+    
+    /* ========== পণ্য ব্যবস্থাপনা ========== */
+    #products-page .bg-white {
+        padding: 0 !important;
+    }
+    
+    #products-page .p-6 {
+        padding: 0 !important;
+    }
+    
+    /* পণ্য টেবিল লুকান */
+    #products-page .data-table {
+        display: none !important;
+    }
+    
+    /* পণ্য কার্ড গ্রিড */
+    .mobile-product-grid {
+        display: grid !important;
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+        padding: 0 !important;
+    }
+    
+    .product-card-mobile {
+        background: white !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 20px !important;
+        overflow: hidden !important;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02) !important;
+    }
+    
+    .product-card-header {
+        display: flex !important;
+        padding: 16px !important;
+        gap: 16px !important;
+        border-bottom: 1px solid #f1f5f9 !important;
+    }
+    
+    .product-image {
+        width: 100px !important;
+        height: 100px !important;
+        border-radius: 16px !important;
+        object-fit: cover !important;
+        border: 1px solid #e2e8f0 !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .product-info {
+        flex: 1 !important;
+    }
+    
+    .product-name-bn {
+        font-size: 17px !important;
+        font-weight: 700 !important;
+        color: #0f172a !important;
+        margin-bottom: 4px !important;
+        line-height: 1.3 !important;
+    }
+    
+    .product-name-en {
+        font-size: 13px !important;
+        color: #64748b !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .product-category {
+        display: inline-block !important;
+        background: #f1f5f9 !important;
+        color: #475569 !important;
+        padding: 4px 12px !important;
+        border-radius: 20px !important;
+        font-size: 12px !important;
+        font-weight: 600 !important;
+        margin-bottom: 8px !important;
+    }
+    
+    .product-price-section {
+        display: flex !important;
+        align-items: baseline !important;
+        gap: 8px !important;
+        flex-wrap: wrap !important;
+    }
+    
+    .product-offer-price {
+        font-size: 20px !important;
+        font-weight: 700 !important;
+        color: #dc2626 !important;
+    }
+    
+    .product-regular-price {
+        font-size: 14px !important;
+        color: #94a3b8 !important;
+        text-decoration: line-through !important;
+    }
+    
+    .product-discount {
+        background: #dc2626 !important;
+        color: white !important;
+        padding: 4px 10px !important;
+        border-radius: 20px !important;
+        font-size: 12px !important;
+        font-weight: 700 !important;
+    }
+    
+    .product-card-body {
+        padding: 16px !important;
+    }
+    
+    .product-colors {
+        margin-bottom: 16px !important;
+    }
+    
+    .color-title {
+        font-size: 13px !important;
+        color: #475569 !important;
+        margin-bottom: 8px !important;
+        font-weight: 600 !important;
+    }
+    
+    .color-list {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    
+    .color-item {
+        display: flex !important;
+        align-items: center !important;
+        gap: 6px !important;
+        background: #f8fafc !important;
+        padding: 6px 12px !important;
+        border-radius: 30px !important;
+        border: 1px solid #e2e8f0 !important;
+    }
+    
+    .color-dot {
+        width: 20px !important;
+        height: 20px !important;
+        border-radius: 50% !important;
+        border: 2px solid white !important;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1) !important;
+    }
+    
+    .color-name {
+        font-size: 13px !important;
+        font-weight: 500 !important;
+    }
+    
+    .product-size {
+        margin-bottom: 16px !important;
+    }
+    
+    .size-title {
+        font-size: 13px !important;
+        color: #475569 !important;
+        margin-bottom: 8px !important;
+        font-weight: 600 !important;
+    }
+    
+    .size-chips {
+        display: flex !important;
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    
+    .size-chip {
+        background: #f8fafc !important;
+        padding: 6px 14px !important;
+        border-radius: 30px !important;
+        font-size: 13px !important;
+        font-weight: 600 !important;
+        border: 1px solid #e2e8f0 !important;
+    }
+    
+    .product-status {
+        display: flex !important;
+        align-items: center !important;
+        gap: 8px !important;
+        margin-bottom: 16px !important;
+    }
+    
+    .status-indicator {
+        width: 10px !important;
+        height: 10px !important;
+        border-radius: 50% !important;
+    }
+    
+    .status-active {
+        background: #10b981 !important;
+    }
+    
+    .status-inactive {
+        background: #ef4444 !important;
+    }
+    
+    .product-actions {
+        display: flex !important;
+        gap: 12px !important;
+        padding-top: 16px !important;
+        border-top: 1px solid #e2e8f0 !important;
+    }
+    
+    .product-edit-btn,
+    .product-delete-btn {
+        flex: 1 !important;
+        padding: 12px !important;
+        border-radius: 12px !important;
+        font-size: 14px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        border: none !important;
+        cursor: pointer !important;
+    }
+    
+    .product-edit-btn {
+        background: #3b82f6 !important;
+        color: white !important;
+    }
+    
+    .product-delete-btn {
+        background: #ef4444 !important;
+        color: white !important;
+    }
+    
+    /* ========== অর্ডার ব্যবস্থাপনা ========== */
+    #orders-page .bg-white {
+        padding: 0 !important;
+    }
+    
+    #orders-page .p-6 {
+        padding: 0 !important;
+    }
+    
+    /* অর্ডার ফিল্টার সার্চ */
+    #orders-page .flex.space-x-3 {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 12px !important;
+        padding: 16px !important;
+    }
+    
+    #order-status-filter,
+    #order-search {
+        width: 100% !important;
+        margin: 0 !important;
+        padding: 14px !important;
+        font-size: 15px !important;
+        border-radius: 12px !important;
+        border: 1px solid #e2e8f0 !important;
+    }
+    
+    /* অর্ডার টেবিল লুকান */
+    #orders-page .data-table {
+        display: none !important;
+    }
+    
+    /* অর্ডার কার্ড গ্রিড */
+    .mobile-orders-grid {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+        padding: 0 16px !important;
+    }
+    
+    .mobile-order-card {
+        background: white !important;
+        border: 1px solid #e2e8f0 !important;
+        border-radius: 20px !important;
+        overflow: hidden !important;
+        box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02) !important;
+    }
+    
+    .mobile-order-header {
+        background: #f8fafc !important;
+        padding: 16px !important;
+        border-bottom: 1px solid #e2e8f0 !important;
+        display: flex !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+    }
+    
+    .mobile-order-id {
+        font-family: monospace !important;
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        color: #0f172a !important;
+    }
+    
+    .mobile-order-status {
+        font-size: 12px !important;
+        padding: 6px 14px !important;
+        border-radius: 30px !important;
+        font-weight: 700 !important;
+        text-transform: uppercase !important;
+        letter-spacing: 0.5px !important;
+    }
+    
+    .mobile-order-body {
+        padding: 16px !important;
+    }
+    
+    .mobile-order-detail {
+        display: flex !important;
+        align-items: flex-start !important;
+        gap: 12px !important;
+        margin-bottom: 16px !important;
+    }
+    
+    .mobile-order-icon {
+        width: 44px !important;
+        height: 44px !important;
+        background: #fee2e2 !important;
+        border-radius: 14px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        color: #dc2626 !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .mobile-order-icon i {
+        font-size: 20px !important;
+    }
+    
+    .mobile-order-info {
+        flex: 1 !important;
+    }
+    
+    .mobile-order-label {
+        font-size: 12px !important;
+        color: #64748b !important;
+        margin-bottom: 4px !important;
+    }
+    
+    .mobile-order-value {
+        font-size: 16px !important;
+        font-weight: 700 !important;
+        color: #0f172a !important;
+    }
+    
+    .mobile-order-sub {
+        font-size: 14px !important;
+        color: #475569 !important;
+        margin-top: 4px !important;
+    }
+    
+    .mobile-order-price {
+        font-size: 22px !important;
+        font-weight: 800 !important;
+        color: #dc2626 !important;
+        margin: 16px 0 !important;
+        text-align: right !important;
+    }
+    
+    .mobile-order-footer {
+        display: flex !important;
+        gap: 12px !important;
+        padding: 16px !important;
+        border-top: 1px solid #e2e8f0 !important;
+    }
+    
+    .mobile-view-btn {
+        flex: 1 !important;
+        background: #dc2626 !important;
+        color: white !important;
+        padding: 14px !important;
+        border-radius: 14px !important;
+        font-size: 15px !important;
+        font-weight: 600 !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        gap: 8px !important;
+        border: none !important;
+        cursor: pointer !important;
+    }
+    
+    /* ========== ক্যাটাগরি ========== */
+    .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+    }
+    
+    .border.border-gray-200.rounded-lg.p-5 {
+        margin-bottom: 0 !important;
+        padding: 20px !important;
+    }
+    
+    .w-12.h-12 {
+        width: 48px !important;
+        height: 48px !important;
+    }
+    
+    .w-12.h-12 i {
+        font-size: 22px !important;
+    }
+    
+    /* ========== স্লাইডার ========== */
+    #sliders-page .border {
+        padding: 20px !important;
+    }
+    
+    #sliders-page .lg:w-1\/3 {
+        width: 100% !important;
+        margin-bottom: 16px !important;
+    }
+    
+    #sliders-page .h-48 {
+        height: 200px !important;
+    }
+    
+    .grid-cols-2.md\:grid-cols-4 {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+    
+    /* ========== কন্টাক্ট ========== */
+    #contacts-list .border {
+        padding: 20px !important;
+    }
+    
+    #contacts-list .flex.justify-between.items-start {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+    
+    #contacts-list .flex.items-start {
+        width: 100% !important;
+    }
+    
+    #contacts-list .flex.space-x-3 {
+        flex-wrap: wrap !important;
+        width: 100% !important;
+    }
+    
+    #contacts-list .btn-outline {
+        flex: 1 1 calc(50% - 8px) !important;
+        margin: 0 !important;
+        padding: 12px !important;
+        font-size: 13px !important;
+    }
+    
+    /* ========== কুপন ========== */
+    #coupons-page .border {
+        padding: 20px !important;
+    }
+    
+    #coupons-page .text-2xl {
+        font-size: 22px !important;
+    }
+    
+    .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+    }
+    
+    /* ========== সেটিংস ========== */
+    #settings-form .bg-gray-50 {
+        padding: 20px !important;
+    }
+    
+    #settings-form .grid-cols-1.md\:grid-cols-2,
+    #settings-form .grid-cols-1.md\:grid-cols-3 {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 16px !important;
+    }
+    
+    #settings-form .flex.items-center.space-x-3 {
+        display: flex !important;
+        align-items: center !important;
+        gap: 16px !important;
+    }
+    
+    /* ========== ড্যাশবোর্ড কুইক অ্যাকশন ========== */
+    .grid-cols-1.lg\:grid-cols-2 {
+        display: block !important;
+    }
+    
+    .bg-white.rounded-xl.p-6 {
+        margin-bottom: 16px !important;
+        padding: 20px !important;
+    }
+    
+    .w-full.text-left.p-4 {
+        padding: 16px !important;
+        display: flex !important;
+        align-items: center !important;
+        gap: 16px !important;
+    }
+    
+    .w-10.h-10 {
+        width: 48px !important;
+        height: 48px !important;
+        flex-shrink: 0 !important;
+    }
+    
+    .w-10.h-10 i {
+        font-size: 20px !important;
+    }
+}
+
+/* ============================================ */
+/* ট্যাবলেট ডিভাইসের জন্য স্পেশাল */
+/* ============================================ */
+@media (min-width: 641px) and (max-width: 768px) {
+    
+    /* ড্যাশবোর্ড */
+    .grid-cols-1.sm\:grid-cols-2.lg\:grid-cols-4 {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+    }
+    
+    /* পণ্য গ্রিড */
+    .mobile-product-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+    }
+    
+    /* অর্ডার কার্ড */
+    .mobile-orders-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+    }
+    
+    /* ক্যাটাগরি */
+    .grid-cols-1.md\:grid-cols-2.lg\:grid-cols-3 {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+    }
+    
+    /* স্লাইডার */
+    #sliders-page .flex-col.lg\:flex-row {
+        display: flex !important;
+        gap: 20px !important;
+    }
+    
+    #sliders-page .lg:w-1\/3 {
+        width: 40% !important;
+    }
+    
+    #sliders-page .lg:w-2\/3 {
+        width: 60% !important;
+    }
+}
+
+/* ============================================ */
+/* ডেস্কটপে টেবিল দেখান, মোবাইলে লুকান */
+/* ============================================ */
+.mobile-order-cards,
+.mobile-product-grid,
+.mobile-orders-grid {
+    display: none;
+}
+
+@media (max-width: 640px) {
+    .mobile-order-cards,
+    .mobile-product-grid,
+    .mobile-orders-grid {
+        display: block !important;
+    }
+    
+    .mobile-product-grid {
+        display: grid !important;
+    }
+    
+    .mobile-orders-grid {
+        display: flex !important;
+    }
+}
+    </style> 
 </head>
 <body>
 
@@ -3125,103 +3927,245 @@ input:checked + .slider:before {
         }
     }
     
-    // ============================================
-    // অর্ডার পেজ
-    // ============================================
-    async function loadOrdersPage() {
-        try {
-            const response = await fetch(`${API_BASE_URL}/api/admin/orders`);
-            const data = await response.json();
-            orders = data.orders || [];
-            
-            const contentArea = document.getElementById('content-area');
-            
-            contentArea.innerHTML = `
-                <div class="bg-white rounded-xl border border-gray-200">
-                    <div class="p-6 border-b border-gray-200">
-                        <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
-                            <div>
-                                <h3 class="text-xl font-bold text-gray-800 flex items-center">
-                                    <i class="fas fa-shopping-cart mr-3 text-green-600"></i>
-                                    অর্ডার ব্যবস্থাপনা
-                                </h3>
-                                <p class="text-gray-600 text-sm mt-1">মোট ${orders.length} টি অর্ডার</p>
-                            </div>
-                            <div class="flex space-x-3">
-                                <select id="order-status-filter" class="form-input w-48" onchange="filterOrders()">
-                                    <option value="">সব অর্ডার</option>
-                                    <option value="pending">পেন্ডিং</option>
-                                    <option value="confirmed">কনফার্মড</option>
-                                    <option value="processing">প্রসেসিং</option>
-                                    <option value="shipped">শিপড</option>
-                                    <option value="delivered">ডেলিভার্ড</option>
-                                    <option value="cancelled">ক্যান্সেলড</option>
-                                </select>
-                                <input type="text" id="order-search" class="form-input w-48" placeholder="অর্ডার আইডি, ফোন..." onkeyup="filterOrders()">
-                                <button onclick="loadOrdersPage()" class="btn btn-outline">
-                                    <i class="fas fa-sync mr-2"></i>
-                                    রিফ্রেশ
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="p-6">
-                        <div class="overflow-x-auto">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th>অর্ডার আইডি</th>
-                                        <th>গ্রাহক</th>
-                                        <th>পণ্য</th>
-                                        <th>পরিমাণ</th>
-                                        <th>মোট</th>
-                                        <th>স্ট্যাটাস</th>
-                                        <th>তারিখ</th>
-                                        <th>ক্রিয়া</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="orders-table-body">
-                                    ${orders.length > 0 ? 
-                                        orders.map(order => `
-                                            <tr>
-                                                <td class="font-mono text-sm">${order.orderId}</td>
-                                                <td>
-                                                    <div class="font-medium">${order.customerName}</div>
-                                                    <div class="text-xs text-gray-500">${order.phone}</div>
-                                                </td>
-                                                <td>${order.productName}</td>
-                                                <td>${order.quantity} পিস</td>
-                                                <td>${order.grandTotal || order.totalPrice}৳</td>
-                                                <td>
-                                                    <span class="status-badge status-${order.status}">
-                                                        ${getStatusText(order.status)}
-                                                    </span>
-                                                </td>
-                                                <td>${formatDate(order.createdAt)}</td>
-                                                <td>
-                                                    <button onclick="viewOrder('${order._id}')" 
-                                                            class="text-blue-600 hover:text-blue-800 p-2">
-                                                        <i class="fas fa-eye"></i>
-                                                    </button>
-                                                </td>
-                                            </tr>
-                                        `).join('') : 
-                                        `<tr><td colspan="8" class="p-8 text-center text-gray-500">কোনো অর্ডার নেই</td></tr>`
-                                    }
-                                </tbody>
-                            </table>
+   // ============================================
+// অর্ডার পেজ - মোবাইল ফ্রেন্ডলি
+// ============================================
+async function loadOrdersPage() {
+    try {
+        const response = await fetch(`${API_BASE_URL}/api/admin/orders`);
+        const data = await response.json();
+        orders = data.orders || [];
+        
+        const contentArea = document.getElementById('content-area');
+        
+        // মোবাইল অর্ডার কার্ড জেনারেট করুন
+        const mobileOrderCards = orders.length > 0 ? 
+            orders.map(order => generateMobileOrderCard(order)).join('') : 
+            '<div class="text-center p-12 text-gray-500">কোনো অর্ডার নেই</div>';
+        
+        contentArea.innerHTML = `
+            <div id="orders-page" class="bg-white rounded-xl border border-gray-200">
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex flex-col md:flex-row md:justify-between md:items-center gap-4">
+                        <div>
+                            <h3 class="text-xl font-bold text-gray-800 flex items-center">
+                                <i class="fas fa-shopping-cart mr-3 text-green-600"></i>
+                                অর্ডার ব্যবস্থাপনা
+                            </h3>
+                            <p class="text-gray-600 text-sm mt-1">মোট ${orders.length} টি অর্ডার</p>
                         </div>
                     </div>
                 </div>
-            `;
+                
+                <!-- Filter Section -->
+                <div class="p-6 border-b border-gray-200">
+                    <div class="flex flex-col md:flex-row gap-4">
+                        <select id="order-status-filter" class="form-input w-full md:w-48" onchange="filterOrders()">
+                            <option value="">সব অর্ডার</option>
+                            <option value="pending">পেন্ডিং</option>
+                            <option value="confirmed">কনফার্মড</option>
+                            <option value="processing">প্রসেসিং</option>
+                            <option value="shipped">শিপড</option>
+                            <option value="delivered">ডেলিভার্ড</option>
+                            <option value="cancelled">ক্যান্সেলড</option>
+                        </select>
+                        <input type="text" id="order-search" class="form-input w-full md:w-64" placeholder="অর্ডার আইডি, ফোন, নাম..." onkeyup="filterOrders()">
+                        <button onclick="loadOrdersPage()" class="btn btn-outline w-full md:w-auto">
+                            <i class="fas fa-sync mr-2"></i>
+                            রিফ্রেশ
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Desktop Table View -->
+                <div class="p-6 desktop-only">
+                    <div class="overflow-x-auto">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>অর্ডার আইডি</th>
+                                    <th>গ্রাহক</th>
+                                    <th>পণ্য</th>
+                                    <th>পরিমাণ</th>
+                                    <th>মোট</th>
+                                    <th>স্ট্যাটাস</th>
+                                    <th>তারিখ</th>
+                                    <th>ক্রিয়া</th>
+                                </tr>
+                            </thead>
+                            <tbody id="orders-table-body">
+                                ${orders.length > 0 ? 
+                                    orders.map(order => `
+                                        <tr>
+                                            <td class="font-mono text-sm">${order.orderId}</td>
+                                            <td>
+                                                <div class="font-medium">${order.customerName}</div>
+                                                <div class="text-xs text-gray-500">${order.phone}</div>
+                                            </td>
+                                            <td>${order.productName}</td>
+                                            <td>${order.quantity} পিস</td>
+                                            <td>${order.grandTotal || order.totalPrice}৳</td>
+                                            <td>
+                                                <span class="status-badge status-${order.status}">
+                                                    ${getStatusText(order.status)}
+                                                </span>
+                                            </td>
+                                            <td>${formatDate(order.createdAt)}</td>
+                                            <td>
+                                                <button onclick="viewOrder('${order._id}')" 
+                                                        class="text-blue-600 hover:text-blue-800 p-2">
+                                                    <i class="fas fa-eye"></i>
+                                                </button>
+                                            </td>
+                                        </tr>
+                                    `).join('') : 
+                                    `<tr><td colspan="8" class="p-8 text-center text-gray-500">কোনো অর্ডার নেই</td></tr>`
+                                }
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                
+                <!-- Mobile Card View -->
+                <div class="mobile-orders-grid p-4" id="mobile-orders-container">
+                    ${mobileOrderCards}
+                </div>
+            </div>
+        `;
+        
+    } catch (error) {
+        console.error('Orders page error:', error);
+        throw error;
+    }
+}
+
+// মোবাইল অর্ডার কার্ড জেনারেটর
+function generateMobileOrderCard(order) {
+    const statusColors = {
+        'pending': 'status-pending',
+        'confirmed': 'status-confirmed',
+        'processing': 'status-processing',
+        'shipped': 'status-shipped',
+        'delivered': 'status-delivered',
+        'cancelled': 'status-cancelled'
+    };
+    
+    return `
+        <div class="mobile-order-card">
+            <div class="mobile-order-header">
+                <span class="mobile-order-id">#${order.orderId}</span>
+                <span class="mobile-order-status ${statusColors[order.status] || 'status-pending'}">
+                    ${getStatusText(order.status)}
+                </span>
+            </div>
             
-        } catch (error) {
-            console.error('Orders page error:', error);
-            throw error;
-        }
+            <div class="mobile-order-body">
+                <div class="mobile-order-detail">
+                    <div class="mobile-order-icon">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="mobile-order-info">
+                        <div class="mobile-order-label">গ্রাহকের নাম</div>
+                        <div class="mobile-order-value">${order.customerName}</div>
+                        <div class="mobile-order-sub">${order.phone}</div>
+                    </div>
+                </div>
+                
+                <div class="mobile-order-detail">
+                    <div class="mobile-order-icon">
+                        <i class="fas fa-map-marker-alt"></i>
+                    </div>
+                    <div class="mobile-order-info">
+                        <div class="mobile-order-label">ঠিকানা</div>
+                        <div class="mobile-order-sub">${order.address || 'N/A'}</div>
+                    </div>
+                </div>
+                
+                <div class="mobile-order-detail">
+                    <div class="mobile-order-icon">
+                        <i class="fas fa-tshirt"></i>
+                    </div>
+                    <div class="mobile-order-info">
+                        <div class="mobile-order-label">পণ্য</div>
+                        <div class="mobile-order-value">${order.productName}</div>
+                        <div class="mobile-order-sub">
+                            ${order.color} | ${order.size} | ${order.quantity} পিস
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mobile-order-price">
+                    ${order.grandTotal || order.totalPrice}৳
+                </div>
+            </div>
+            
+            <div class="mobile-order-footer">
+                <button onclick="viewOrder('${order._id}')" class="mobile-view-btn">
+                    <i class="fas fa-eye"></i>
+                    বিস্তারিত দেখুন
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+// অর্ডার ফিল্টার - মোবাইল আপডেটেড
+function filterOrders() {
+    const statusFilter = document.getElementById('order-status-filter').value;
+    const searchText = document.getElementById('order-search').value.toLowerCase();
+    
+    let filtered = orders;
+    
+    if (statusFilter) {
+        filtered = filtered.filter(order => order.status === statusFilter);
     }
     
+    if (searchText) {
+        filtered = filtered.filter(order => 
+            (order.orderId && order.orderId.toLowerCase().includes(searchText)) ||
+            (order.customerName && order.customerName.toLowerCase().includes(searchText)) ||
+            (order.phone && order.phone.includes(searchText))
+        );
+    }
+    
+    // Desktop Table Update
+    const tableBody = document.getElementById('orders-table-body');
+    if (tableBody) {
+        tableBody.innerHTML = filtered.length > 0 ? 
+            filtered.map(order => `
+                <tr>
+                    <td class="font-mono text-sm">${order.orderId}</td>
+                    <td>
+                        <div class="font-medium">${order.customerName}</div>
+                        <div class="text-xs text-gray-500">${order.phone}</div>
+                    </td>
+                    <td>${order.productName}</td>
+                    <td>${order.quantity} পিস</td>
+                    <td>${order.grandTotal || order.totalPrice}৳</td>
+                    <td>
+                        <span class="status-badge status-${order.status}">
+                            ${getStatusText(order.status)}
+                        </span>
+                    </td>
+                    <td>${formatDate(order.createdAt)}</td>
+                    <td>
+                        <button onclick="viewOrder('${order._id}')" class="text-blue-600 hover:text-blue-800 p-2">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </td>
+                </tr>
+            `).join('') : 
+            '<tr><td colspan="8" class="p-8 text-center text-gray-500">কোনো অর্ডার পাওয়া যায়নি</td></tr>';
+    }
+    
+    // Mobile Cards Update
+    const mobileContainer = document.getElementById('mobile-orders-container');
+    if (mobileContainer) {
+        mobileContainer.innerHTML = filtered.length > 0 ? 
+            filtered.map(order => generateMobileOrderCard(order)).join('') : 
+            '<div class="text-center p-12 text-gray-500">কোনো অর্ডার পাওয়া যায়নি</div>';
+    }
+}
     // ============================================
     // অর্ডার ফিল্টার
     // ============================================
@@ -5786,7 +6730,7 @@ function hideAllModals() {
 }
 
 // ============================================
-// ড্যাশবোর্ড কন্টেন্ট লোড - ফাইনাল ভার্সন
+// ড্যাশবোর্ড কন্টেন্ট লোড - মোবাইল ফ্রেন্ডলি
 // ============================================
 async function loadDashboardContent() {
     try {
@@ -5798,77 +6742,74 @@ async function loadDashboardContent() {
         
         const data = await response.json();
         
+        // মোবাইল অর্ডার কার্ড জেনারেট করুন
+        const mobileOrderCards = data.recentOrders && data.recentOrders.length > 0 ? 
+            data.recentOrders.map(order => `
+                <div class="order-card">
+                    <div class="order-card-header">
+                        <span class="order-id">${order.orderId || 'N/A'}</span>
+                        <span class="order-status-badge status-${order.status || 'pending'}">
+                            ${getStatusText(order.status)}
+                        </span>
+                    </div>
+                    <div class="order-card-body">
+                        <div class="order-info-row">
+                            <div class="order-info-icon">
+                                <i class="fas fa-user"></i>
+                            </div>
+                            <div class="order-info-content">
+                                <div class="order-info-label">গ্রাহক</div>
+                                <div class="order-customer">${order.customerName || 'N/A'}</div>
+                                <div class="order-phone">${order.phone || ''}</div>
+                            </div>
+                        </div>
+                        <div class="order-info-row">
+                            <div class="order-info-icon">
+                                <i class="fas fa-tshirt"></i>
+                            </div>
+                            <div class="order-info-content">
+                                <div class="order-info-label">পণ্য</div>
+                                <div class="order-product">${order.productName || 'N/A'}</div>
+                            </div>
+                        </div>
+                        <div class="order-info-row">
+                            <div class="order-info-icon">
+                                <i class="fas fa-tag"></i>
+                            </div>
+                            <div class="order-info-content">
+                                <div class="order-info-label">মোট মূল্য</div>
+                                <div class="order-price">${order.totalPrice || 0} টাকা</div>
+                            </div>
+                        </div>
+                        <div class="order-info-row">
+                            <div class="order-info-icon">
+                                <i class="fas fa-calendar"></i>
+                            </div>
+                            <div class="order-info-content">
+                                <div class="order-info-label">তারিখ</div>
+                                <div class="order-date">
+                                    <i class="far fa-clock"></i>
+                                    ${formatDate(order.createdAt)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-card-footer">
+                        <button onclick="viewOrder('${order._id}')" class="view-order-btn">
+                            <i class="fas fa-eye"></i>
+                            বিস্তারিত দেখুন
+                        </button>
+                    </div>
+                </div>
+            `).join('') : 
+            '<div class="text-center p-8 text-gray-500">কোনো অর্ডার নেই</div>';
+        
         return `
             <div id="dashboard-page" class="page-content">
                 <!-- Statistics Cards -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-                    <div class="stat-card">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-gray-500 text-sm mb-1">মোট অর্ডার</p>
-                                <p class="text-3xl font-bold">${data.totalOrders || 0}</p>
-                                <p class="text-sm text-gray-500 mt-2">আজ: ${data.todayOrders || 0}</p>
-                            </div>
-                            <div class="stat-icon bg-red-100 text-red-600">
-                                <i class="fas fa-shopping-cart"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <span class="text-yellow-600 font-semibold">${data.pendingOrders || 0}</span>
-                            <span class="text-gray-500 text-sm"> পেন্ডিং</span>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-gray-500 text-sm mb-1">মোট আয়</p>
-                                <p class="text-3xl font-bold">${(data.totalRevenue || 0).toLocaleString()}</p>
-                                <p class="text-sm text-gray-500 mt-2">টাকা</p>
-                            </div>
-                            <div class="stat-icon bg-green-100 text-green-600">
-                                <i class="fas fa-money-bill-wave"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <span class="text-green-600 font-semibold">${data.deliveredOrders || 0}</span>
-                            <span class="text-gray-500 text-sm"> ডেলিভার্ড</span>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-gray-500 text-sm mb-1">মোট পণ্য</p>
-                                <p class="text-3xl font-bold">${data.totalProducts || 0}</p>
-                                <p class="text-sm text-gray-500 mt-2">সক্রিয়: ${data.activeProducts || 0}</p>
-                            </div>
-                            <div class="stat-icon bg-blue-100 text-blue-600">
-                                <i class="fas fa-tshirt"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <span class="text-blue-600 font-semibold">${data.featuredProducts || 0}</span>
-                            <span class="text-gray-500 text-sm"> ফিচার্ড</span>
-                        </div>
-                    </div>
-                    
-                    <div class="stat-card">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <p class="text-gray-500 text-sm mb-1">মোট রিভিউ</p>
-                                <p class="text-3xl font-bold">${data.totalReviews || 0}</p>
-                                <p class="text-sm text-gray-500 mt-2">পেন্ডিং: ${data.pendingReviews || 0}</p>
-                            </div>
-                            <div class="stat-icon bg-yellow-100 text-yellow-600">
-                                <i class="fas fa-star"></i>
-                            </div>
-                        </div>
-                        <div class="mt-4 pt-4 border-t border-gray-100">
-                            <span class="text-purple-600 font-semibold">${data.featuredReviews || 0}</span>
-                            <span class="text-gray-500 text-sm"> ফিচার্ড</span>
-                        </div>
-                    </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8 dashboard-stats">
+                    <!-- ... আপনার existing stat cards ... -->
+                    ${generateStatCards(data)}
                 </div>
                 
                 <!-- Charts Row -->
@@ -5889,8 +6830,8 @@ async function loadDashboardContent() {
                     </div>
                 </div>
                 
-                <!-- Recent Orders -->
-                <div class="bg-white rounded-xl border border-gray-200 mb-8">
+                <!-- Recent Orders - Desktop Table -->
+                <div class="bg-white rounded-xl border border-gray-200 mb-8 desktop-only">
                     <div class="p-6 border-b border-gray-200 flex justify-between items-center">
                         <h3 class="font-bold text-gray-800 flex items-center">
                             <i class="fas fa-clock mr-2 text-yellow-500"></i>
@@ -5947,112 +6888,186 @@ async function loadDashboardContent() {
                     </div>
                 </div>
                 
+                <!-- Recent Orders - Mobile Cards -->
+                <div class="mobile-order-cards mb-8">
+                    <div class="flex justify-between items-center mb-4 px-2">
+                        <h3 class="font-bold text-gray-800 flex items-center">
+                            <i class="fas fa-clock mr-2 text-yellow-500"></i>
+                            সাম্প্রতিক অর্ডার
+                        </h3>
+                        <button onclick="switchPage('orders')" class="text-red-600 hover:text-red-800 text-sm font-medium">
+                            সব দেখুন <i class="fas fa-arrow-right ml-1"></i>
+                        </button>
+                    </div>
+                    ${mobileOrderCards}
+                </div>
+                
                 <!-- Quick Actions -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                    <div class="bg-white rounded-xl p-6 border border-gray-200">
-                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                            <i class="fas fa-bolt mr-2 text-yellow-500"></i>
-                            দ্রুত কাজ
-                        </h3>
-                        <div class="space-y-3">
-                            <button onclick="showAddProductModal()" class="w-full text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center">
-                                <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mr-3">
-                                    <i class="fas fa-plus"></i>
-                                </div>
-                                <div>
-                                    <p class="font-medium">নতুন পণ্য যোগ করুন</p>
-                                    <p class="text-sm text-gray-500">পণ্য তালিকায় নতুন আইটেম</p>
-                                </div>
-                            </button>
-                            
-                            <button onclick="showAddSliderModal()" class="w-full text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center">
-                                <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 mr-3">
-                                    <i class="fas fa-images"></i>
-                                </div>
-                                <div>
-                                    <p class="font-medium">নতুন স্লাইডার যোগ করুন</p>
-                                    <p class="text-sm text-gray-500">হোমপেজ স্লাইডার আপডেট</p>
-                                </div>
-                            </button>
-                            
-                            <button onclick="showAddCouponModal()" class="w-full text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center">
-                                <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 mr-3">
-                                    <i class="fas fa-ticket-alt"></i>
-                                </div>
-                                <div>
-                                    <p class="font-medium">নতুন কুপন যোগ করুন</p>
-                                    <p class="text-sm text-gray-500">ডিসকাউন্ট কুপন তৈরি করুন</p>
-                                </div>
-                            </button>
-                        </div>
-                    </div>
-                    
-                    <div class="bg-white rounded-xl p-6 border border-gray-200">
-                        <h3 class="font-bold text-gray-800 mb-4 flex items-center">
-                            <i class="fas fa-info-circle mr-2 text-blue-500"></i>
-                            সারাংশ
-                        </h3>
-                        <div class="space-y-4">
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="text-sm text-gray-500">মোট ক্যাটাগরি</p>
-                                    <p class="text-2xl font-bold">${data.totalCategories || 0}</p>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-500">সক্রিয়</p>
-                                    <p class="text-xl font-semibold text-green-600">${data.activeCategories || 0}</p>
-                                </div>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="text-sm text-gray-500">মোট স্লাইডার</p>
-                                    <p class="text-2xl font-bold">${data.totalSliders || 0}</p>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-500">সক্রিয়</p>
-                                    <p class="text-xl font-semibold text-green-600">${data.activeSliders || 0}</p>
-                                </div>
-                            </div>
-                            <div class="flex justify-between items-center">
-                                <div>
-                                    <p class="text-sm text-gray-500">অপঠিত বার্তা</p>
-                                    <p class="text-2xl font-bold text-red-600">${data.unreadContacts || 0}</p>
-                                </div>
-                                <div>
-                                    <p class="text-sm text-gray-500">মোট কন্টাক্ট</p>
-                                    <p class="text-xl font-semibold">${data.totalContacts || 0}</p>
-                                </div>
-                            </div>
-                            <div class="pt-4 mt-2 border-t border-gray-200">
-                                <p class="text-sm text-gray-500 mb-1">সর্বশেষ আপডেট</p>
-                                <p class="text-sm font-medium">${new Date().toLocaleString('bn-BD')}</p>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- ... আপনার existing quick actions ... -->
+                    ${generateQuickActions()}
                 </div>
             </div>
         `;
         
     } catch (error) {
         console.error('Dashboard content error:', error);
-        return `
-            <div class="flex flex-col items-center justify-center h-64 bg-white rounded-xl border border-gray-200 p-8">
-                <i class="fas fa-exclamation-triangle text-4xl text-red-500 mb-4"></i>
-                <h3 class="text-xl font-bold text-gray-800 mb-2">ড্যাশবোর্ড লোড করতে সমস্যা হয়েছে</h3>
-                <p class="text-gray-600 mb-6">${error.message || 'সার্ভার থেকে ডেটা আনা যায়নি'}</p>
-                <div class="flex space-x-4">
-                    <button onclick="loadDashboard()" class="btn btn-primary">
-                        <i class="fas fa-sync mr-2"></i>
-                        আবার চেষ্টা করুন
-                    </button>
-                    <button onclick="checkAPIConnection()" class="btn btn-outline">
-                        <i class="fas fa-plug mr-2"></i>
-                        API চেক করুন
-                    </button>
+        return errorTemplate(error);
+    }
+}
+
+// হেল্পার ফাংশন - স্ট্যাট কার্ড
+function generateStatCards(data) {
+    return `
+        <div class="stat-card">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-gray-500 text-sm mb-1">মোট অর্ডার</p>
+                    <p class="text-3xl font-bold">${data.totalOrders || 0}</p>
+                    <p class="text-sm text-gray-500 mt-2">আজ: ${data.todayOrders || 0}</p>
+                </div>
+                <div class="stat-icon bg-red-100 text-red-600">
+                    <i class="fas fa-shopping-cart"></i>
                 </div>
             </div>
-        `;
-    }
+            <div class="mt-4 pt-4 border-t border-gray-100">
+                <span class="text-yellow-600 font-semibold">${data.pendingOrders || 0}</span>
+                <span class="text-gray-500 text-sm"> পেন্ডিং</span>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-gray-500 text-sm mb-1">মোট আয়</p>
+                    <p class="text-3xl font-bold">${(data.totalRevenue || 0).toLocaleString()}</p>
+                    <p class="text-sm text-gray-500 mt-2">টাকা</p>
+                </div>
+                <div class="stat-icon bg-green-100 text-green-600">
+                    <i class="fas fa-money-bill-wave"></i>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100">
+                <span class="text-green-600 font-semibold">${data.deliveredOrders || 0}</span>
+                <span class="text-gray-500 text-sm"> ডেলিভার্ড</span>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-gray-500 text-sm mb-1">মোট পণ্য</p>
+                    <p class="text-3xl font-bold">${data.totalProducts || 0}</p>
+                    <p class="text-sm text-gray-500 mt-2">সক্রিয়: ${data.activeProducts || 0}</p>
+                </div>
+                <div class="stat-icon bg-blue-100 text-blue-600">
+                    <i class="fas fa-tshirt"></i>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100">
+                <span class="text-blue-600 font-semibold">${data.featuredProducts || 0}</span>
+                <span class="text-gray-500 text-sm"> ফিচার্ড</span>
+            </div>
+        </div>
+        
+        <div class="stat-card">
+            <div class="flex justify-between items-start">
+                <div>
+                    <p class="text-gray-500 text-sm mb-1">মোট রিভিউ</p>
+                    <p class="text-3xl font-bold">${data.totalReviews || 0}</p>
+                    <p class="text-sm text-gray-500 mt-2">পেন্ডিং: ${data.pendingReviews || 0}</p>
+                </div>
+                <div class="stat-icon bg-yellow-100 text-yellow-600">
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            <div class="mt-4 pt-4 border-t border-gray-100">
+                <span class="text-purple-600 font-semibold">${data.featuredReviews || 0}</span>
+                <span class="text-gray-500 text-sm"> ফিচার্ড</span>
+            </div>
+        </div>
+    `;
+}
+
+function generateQuickActions() {
+    return `
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-bolt mr-2 text-yellow-500"></i>
+                দ্রুত কাজ
+            </h3>
+            <div class="space-y-3">
+                <button onclick="showAddProductModal()" class="w-full text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center">
+                    <div class="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center text-blue-600 mr-3">
+                        <i class="fas fa-plus"></i>
+                    </div>
+                    <div>
+                        <p class="font-medium">নতুন পণ্য যোগ করুন</p>
+                        <p class="text-sm text-gray-500">পণ্য তালিকায় নতুন আইটেম</p>
+                    </div>
+                </button>
+                
+                <button onclick="showAddSliderModal()" class="w-full text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center">
+                    <div class="w-10 h-10 bg-purple-100 rounded-lg flex items-center justify-center text-purple-600 mr-3">
+                        <i class="fas fa-images"></i>
+                    </div>
+                    <div>
+                        <p class="font-medium">নতুন স্লাইডার যোগ করুন</p>
+                        <p class="text-sm text-gray-500">হোমপেজ স্লাইডার আপডেট</p>
+                    </div>
+                </button>
+                
+                <button onclick="showAddCouponModal()" class="w-full text-left p-4 border border-gray-200 rounded-lg hover:bg-gray-50 transition flex items-center">
+                    <div class="w-10 h-10 bg-green-100 rounded-lg flex items-center justify-center text-green-600 mr-3">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div>
+                        <p class="font-medium">নতুন কুপন যোগ করুন</p>
+                        <p class="text-sm text-gray-500">ডিসকাউন্ট কুপন তৈরি করুন</p>
+                    </div>
+                </button>
+            </div>
+        </div>
+        
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+            <h3 class="font-bold text-gray-800 mb-4 flex items-center">
+                <i class="fas fa-info-circle mr-2 text-blue-500"></i>
+                সারাংশ
+            </h3>
+            <div class="space-y-4">
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-sm text-gray-500">মোট ক্যাটাগরি</p>
+                        <p class="text-2xl font-bold">${data.totalCategories || 0}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">সক্রিয়</p>
+                        <p class="text-xl font-semibold text-green-600">${data.activeCategories || 0}</p>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-sm text-gray-500">মোট স্লাইডার</p>
+                        <p class="text-2xl font-bold">${data.totalSliders || 0}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">সক্রিয়</p>
+                        <p class="text-xl font-semibold text-green-600">${data.activeSliders || 0}</p>
+                    </div>
+                </div>
+                <div class="flex justify-between items-center">
+                    <div>
+                        <p class="text-sm text-gray-500">অপঠিত বার্তা</p>
+                        <p class="text-2xl font-bold text-red-600">${data.unreadContacts || 0}</p>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-500">মোট কন্টাক্ট</p>
+                        <p class="text-xl font-semibold">${data.totalContacts || 0}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
 }
 
 // ============================================
