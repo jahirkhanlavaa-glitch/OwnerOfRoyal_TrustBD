@@ -21,8 +21,8 @@ cloudinary.config({
 // ✅ Middleware
 app.use(cors({
   origin: [
-    'https://heartfelt-quokka-7f7a23.netlify.app',
-    'https://singular-kashata-4cf2df.netlify.app',
+    'https://owner-of-royal-trust-o299viqa1-jahirkhanlavaa-glitchs-projects.vercel.app',
+    'https://owner-of-royal-trust-bd-899i.vercel.app',
     'http://localhost:3000',
     'http://localhost:5000'
   ],
