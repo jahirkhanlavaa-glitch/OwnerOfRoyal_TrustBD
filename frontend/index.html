@@ -77,6 +77,29 @@
             max-width: 100%;
         }
         
+        /* ---------- ডেস্কটপে স্লাইডার টেক্সট ও ইমেজের ব্যালান্স ---------- */
+        @media (min-width: 1024px) {
+            .slide-content {
+                max-width: 600px;
+                margin-left: 8%;
+                margin-right: auto;
+            }
+            .slide-text-container {
+                padding: 25px 35px;
+                background: rgba(0, 0, 0, 0.3); /* আরও স্বচ্ছ */
+                backdrop-filter: blur(6px);
+                border-left-width: 6px;
+            }
+            /* গ্রেডিয়েন্ট ওভারলে ডান দিকে হালকা করা হলো */
+            .hero-slide .bg-gradient-to-r {
+                background: linear-gradient(to right, 
+                    rgba(0,0,0,0.7) 0%, 
+                    rgba(0,0,0,0.3) 50%, 
+                    rgba(0,0,0,0.1) 100%);
+            }
+        }
+        /* --------------------------------------------------------------- */
+        
         .order-now-btn {
             position: absolute; 
             bottom: 80px; 
@@ -572,7 +595,7 @@
 <nav class="navbar" id="navbar">
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center py-3">
-            <!-- লোগো - উক্ত লগু (ROYAL TRUST BID) বসানো হয়েছে -->
+            <!-- লোগো -->
             <a href="#home" class="logo-container">
                 <div class="logo-icon">
     <img src="https://res.cloudinary.com/dorpsn4nf/image/upload/v1770951385/royal_trust/branding/bmduvmepuazebqphm2j5.png" alt="Royal Trust BID Logo" width="150">
