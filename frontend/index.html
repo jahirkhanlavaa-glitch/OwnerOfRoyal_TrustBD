@@ -858,6 +858,158 @@
     let filteredProducts = [];
     let websiteSettings = {};
     
+            // ============================================
+        // শেয়ার লিংক কপি করার ফাংশন (নতুন)
+        // ============================================
+        window.copyProductLink = function(event, productId) {
+            event.preventDefault();  // পৃষ্ঠা রিলোড হওয়া বন্ধ করে
+            const url = `${window.location.origin}?product=${productId}`;
+            navigator.clipboard.writeText(url).then(() => {
+                // ছোট্ট নোটিফিকেশন (আপনার ডিজাইন অনুযায়ী পরিবর্তন করতে পারেন)
+                alert('✅ লিংক কপি হয়েছে! এখন আপনি এটি শেয়ার করতে পারেন।');
+            }).catch(() => {
+                alert('❌ লিংক কপি করতে সমস্যা হয়েছে। ম্যানুয়ালি কপি করুন: ' + url);
+            });
+        };
+
+        // ============================================
+        // loadProductUI - আপডেটেড (শেয়ার আইকন যুক্ত)
+        // ============================================
+        function loadProductUI(category = 'all') {
+            const container = document.getElementById('product-container');
+
+            filteredProducts = category === 'all' 
+                ? products 
+                : products.filter(p => p.category === category && p.isActive);
+
+            if (!filteredProducts || filteredProducts.length === 0) {
+                container.innerHTML = `<div class="col-span-full text-center py-12">
+                    <i class="fas fa-tshirt text-4xl text-gray-400 mb-4"></i>
+                    <p class="text-gray-600">এই ক্যাটাগরিতে কোনো পণ্য নেই</p>
+                </div>`;
+                return;
+            }
+
+            container.innerHTML = filteredProducts.map(product => {
+                if (!product.isActive) return '';
+
+                let badgeClass = 'offer-badge';
+                if (product.category === 'fitness') badgeClass = 'offer-badge fitness-badge';
+                else if (product.category === 'three-piece') badgeClass = 'offer-badge three-piece-badge';
+                else if (product.category === 'tshirt') badgeClass = 'offer-badge tshirt-badge';
+
+                let categoryName = { 
+                    panjabi: 'পাঞ্জাবি', 
+                    tshirt: 'টি-শার্ট', 
+                    'three-piece': 'থ্রি পিজ', 
+                    fitness: 'ফিটনেস' 
+                }[product.category] || product.category;
+
+                // ফিটনেস (ভ্যারিয়েন্ট ছাড়া) কার্ড
+                if (product.category === 'fitness' && product.hasVariants === false) {
+                    return `<div class="product-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                        <div class="relative">
+                            <div class="h-48 bg-gray-100 overflow-hidden">
+                                <img src="${product.colors?.[0]?.image || 'https://images.unsplash.com/photo-1581092921461-39b9c3e7b7b5?w=800'}" 
+                                     alt="${product.name}" class="w-full h-full object-cover">
+                            </div>
+                            <div class="${badgeClass}">${product.offerPercentage}% ছাড়</div>
+                            <div class="absolute top-10 left-2 bg-white/90 px-2 py-1 rounded text-xs font-bold">${categoryName}</div>
+                        </div>
+                        <div class="p-6">
+                            <div class="flex justify-between items-start">
+                                <h3 class="text-xl font-bold mb-2 flex-1">${product.name}</h3>
+                                <!-- শেয়ার আইকন -->
+                                <a href="?product=${product._id}" 
+                                   class="product-share-link text-gray-500 hover:text-red-600 transition ml-2" 
+                                   title="শেয়ার লিংক কপি করুন"
+                                   onclick="copyProductLink(event, '${product._id}')">
+                                    <i class="fas fa-share-alt"></i>
+                                </a>
+                            </div>
+                            <p class="text-gray-600 text-sm mb-3">${product.description}</p>
+                            ${product.features ? `
+                            <div class="fitness-features mb-4">
+                                ${product.features.map(f => `<p class="text-sm"><i class="fas fa-check-circle"></i>${f}</p>`).join('')}
+                            </div>` : ''}
+                            <p class="mb-4"><span class="font-medium">সাইজ:</span> ${product.size}</p>
+                            <div class="flex justify-between items-center">
+                                <div>
+                                    <p class="text-lg line-through text-gray-500">${product.regularPrice} টাকা</p>
+                                    <p class="text-2xl font-bold text-red-700">${product.offerPrice} টাকা</p>
+                                </div>
+                                <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full add-to-order" data-id="${product._id}">অর্ডার করুন</button>
+                            </div>
+                        </div>
+                    </div>`;
+                }
+
+                // অন্যান্য সব কার্ড (পাঞ্জাবি, টি-শার্ট, থ্রি পিজ)
+                return `<div class="product-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
+                    <div class="relative">
+                        <div class="h-48 bg-gray-100 overflow-hidden">
+                            <img src="${product.colors?.[0]?.image || 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=800'}" 
+                                 alt="${product.name}" class="w-full h-full object-cover" id="image-${product._id}">
+                        </div>
+                        <div class="${badgeClass}">${product.offerPercentage}% ছাড়</div>
+                        <div class="absolute top-10 left-2 bg-white/90 px-2 py-1 rounded text-xs font-bold">${categoryName}</div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex justify-between items-start">
+                            <h3 class="text-xl font-bold mb-2 flex-1">${product.name}</h3>
+                            <!-- শেয়ার আইকন -->
+                            <a href="?product=${product._id}" 
+                               class="product-share-link text-gray-500 hover:text-red-600 transition ml-2" 
+                               title="শেয়ার লিংক কপি করুন"
+                               onclick="copyProductLink(event, '${product._id}')">
+                                <i class="fas fa-share-alt"></i>
+                            </a>
+                        </div>
+                        <p class="text-gray-600 text-sm mb-4">${product.description}</p>
+                        
+                        ${product.colors ? `
+                        <div class="mb-4">
+                            <p class="font-medium text-gray-700 mb-2">রং নির্বাচন করুন:</p>
+                            <div class="flex flex-wrap items-center" id="color-selector-${product._id}">
+                                ${product.colors.map((color, i) => `
+                                    <div class="color-option ${i === 0 ? 'active' : ''}" 
+                                         style="background-color: ${color.code}"
+                                         title="${color.name}"
+                                         data-image="${color.image}"
+                                         data-color-name="${color.name}"
+                                         data-product-id="${product._id}"></div>
+                                `).join('')}
+                            </div>
+                            <p class="text-sm text-gray-600 mt-1" id="selected-color-${product._id}">সিলেক্টেড: ${product.colors[0].name}</p>
+                        </div>` : ''}
+                        
+                        <p class="mb-4"><span class="font-medium">সাইজ:</span> ${product.size}</p>
+                        
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <p class="text-lg line-through text-gray-500">${product.regularPrice} টাকা</p>
+                                <p class="text-2xl font-bold text-red-700">${product.offerPrice} টাকা</p>
+                            </div>
+                            <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full add-to-order" data-id="${product._id}">অর্ডার করুন</button>
+                        </div>
+                    </div>
+                </div>`;
+            }).join('');
+
+            // রং সিলেক্টরের ইভেন্ট লিসেনার (আগের মত)
+            document.querySelectorAll('.color-option').forEach(el => {
+                el.addEventListener('click', function() {
+                    const pid = this.dataset.productId;
+                    document.querySelectorAll(`#color-selector-${pid} .color-option`).forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+                    const img = document.getElementById(`image-${pid}`);
+                    if (img) img.src = this.dataset.image;
+                    const sel = document.getElementById(`selected-color-${pid}`);
+                    if (sel) sel.textContent = `সিলেক্টেড: ${this.dataset.colorName}`;
+                });
+            });
+        }
+        
     // ============================================
     // ডকুমেন্ট রেডি - সবকিছু লোড
     // ============================================
