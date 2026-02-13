@@ -21,8 +21,8 @@ cloudinary.config({
 // ✅ Middleware
 app.use(cors({
   origin: [
-    'https://owner-of-royal-trust-o299viqa1-jahirkhanlavaa-glitchs-projects.vercel.app',
-    'https://owner-of-royal-trust-bd-899i.vercel.app',
+    'https://royaltrustbd.shop',
+    'https://admin.royaltrustbd.shop',
     'http://localhost:3000',
     'http://localhost:5000'
   ],
