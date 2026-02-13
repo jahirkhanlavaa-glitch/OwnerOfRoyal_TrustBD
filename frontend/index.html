@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=yes">
-    <title>ROYAL TRUST BD - প্রিমিয়াম পাঞ্জাবি, টি-শার্ট, থ্রি পিজ ও ফিটনেস</title>
+    <title>ROYAL TRUST BID - প্রিমিয়াম পাঞ্জাবি, টি-শার্ট, থ্রি পিজ ও ফিটনেস</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -129,7 +129,7 @@
             height: 2px; background: #dc2626; border-radius: 2px;
         }
         
-        /* লোগো স্টাইল */
+        /* লোগো স্টাইল - আপডেটেড (টেক্সট লোগো) */
         .logo-container {
             display: flex;
             align-items: center;
@@ -137,19 +137,29 @@
         }
         
         .logo-icon {
-            width: 40px;
-            height: 40px;
+            width: 56px;
+            height: 56px;
             background: linear-gradient(135deg, #dc2626, #b91c1c);
-            border-radius: 10px;
+            border-radius: 12px;
             display: flex;
+            flex-direction: column;
             align-items: center;
             justify-content: center;
             color: white;
-            font-size: 20px;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.2;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
             transform: rotate(5deg);
             transition: transform 0.3s ease;
+            padding: 4px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
         }
-        
+        .logo-icon span {
+            display: block;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.2);
+        }
         .logo-icon:hover {
             transform: rotate(0deg) scale(1.1);
         }
@@ -178,6 +188,11 @@
             }
             .logo-sub {
                 font-size: 0.6rem;
+            }
+            .logo-icon {
+                width: 48px;
+                height: 48px;
+                font-size: 11px;
             }
         }
         
@@ -554,18 +569,17 @@
 </head>
 <body class="bg-gray-50 text-gray-800">
 
-<!-- নেভিগেশন বার - আপডেটেড -->
+<!-- নেভিগেশন বার - লোগো আপডেট করা হয়েছে (টেক্সট লোগো) -->
 <nav class="navbar" id="navbar">
     <div class="container mx-auto px-4">
         <div class="flex justify-between items-center py-3">
-            <!-- লোগো - আপডেটেড -->
+            <!-- লোগো - উক্ত লগু (ROYAL TRUST BID) বসানো হয়েছে -->
             <a href="#home" class="logo-container">
-               <div >
-   <img src="admin_panel/img/Logo.png" alt="Logo" width="40">
-
+                <div class="logo-icon">
+    <img src="/admin_panel/img/Logo.png" alt="Royal Trust BID Logo" width="150">
 </div>
                 <div class="logo-text">
-                    <span class="logo-main">ROYAL TRUST BD</span>
+                    <span class="logo-main">ROYAL TRUST BID</span>
                     <span class="logo-sub">প্রিমিয়াম কালেকশন</span>
                 </div>
             </a>
@@ -582,7 +596,7 @@
                 </a>
             </div>
             
-            <!-- মোবাইল হ্যামবার্গার কন্টেইনার - আপডেটেড -->
+            <!-- মোবাইল হ্যামবার্গার কন্টেইনার -->
             <div class="hamburger-container">
                 <div class="hamburger" id="hamburger">
                     <span></span>
@@ -592,7 +606,7 @@
             </div>
         </div>
         
-        <!-- মোবাইল মেনু - আপডেটেড -->
+        <!-- মোবাইল মেনু -->
         <div class="mobile-menu" id="mobileMenu">
             <a href="#home" class="nav-link active">
                 <i class="fas fa-home"></i>
@@ -616,7 +630,7 @@
             </a>
             <a href="tel:01911465879" class="mobile-call-btn">
                 <i class="fas fa-phone-alt"></i>
-                কল করুন: ০১৯১১৪৬৫৮৭৯
+                কল করুন: 01911465879
             </a>
         </div>
     </div>
@@ -803,7 +817,7 @@
     <div class="container mx-auto px-4">
         <div class="flex flex-col md:flex-row justify-between items-center">
             <div class="mb-8 md:mb-0">
-                <h3 class="text-3xl font-bold mb-4">ROYAL TRUST BD</h3>
+                <h3 class="text-3xl font-bold mb-4">ROYAL TRUST BID</h3>
                 <p class="text-gray-300" id="footer-text">প্রিমিয়াম পাঞ্জাবি, টি-শার্ট, থ্রি পিজ ও ফিটনেস পরিধানের নির্ভরযোগ্য ঠিকানা</p>
             </div>
             
@@ -816,7 +830,7 @@
         </div>
         
         <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
-            <p>&copy; <span id="current-year">2024</span> ROYAL TRUST BD. সকল স্বত্ব সংরক্ষিত।</p>
+            <p>&copy; <span id="current-year">2024</span> ROYAL TRUST BID. সকল স্বত্ব সংরক্ষিত।</p>
         </div>
     </div>
 </footer>
@@ -869,11 +883,11 @@
         loadAllData();
         setupUI();
         setupCategoryTabs();
-        setupMobileMenu(); // মোবাইল মেনু সেটআপ
+        setupMobileMenu();
     });
     
     // ============================================
-    // মোবাইল মেনু ফাংশন - নতুন যোগ করা
+    // মোবাইল মেনু ফাংশন
     // ============================================
     
     function setupMobileMenu() {
@@ -887,7 +901,6 @@
             mobileMenu.classList.toggle('active', show);
             overlay.classList.toggle('active', show);
             
-            // স্ক্রোল বন্ধ/চালু
             document.body.style.overflow = show ? 'hidden' : '';
             
             if (show) {
@@ -899,28 +912,23 @@
             }
         }
         
-        // হ্যামবার্গার ক্লিক
         hamburger.addEventListener('click', function(e) {
             e.stopPropagation();
             const isActive = mobileMenu.classList.contains('active');
             toggleMenu(!isActive);
         });
         
-        // ওভারলে ক্লিক
         overlay.addEventListener('click', function() {
             toggleMenu(false);
         });
         
-        // মোবাইল মেনুর লিংক ক্লিক
         navLinks.forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
                 
-                // অ্যাক্টিভ ক্লাস আপডেট
                 navLinks.forEach(l => l.classList.remove('active'));
                 this.classList.add('active');
                 
-                // স্ক্রল টু সেকশন
                 const id = this.getAttribute('href');
                 if (id?.startsWith('#')) {
                     const el = document.querySelector(id);
@@ -934,7 +942,6 @@
             });
         });
         
-        // রিসাইজ ইভেন্ট
         window.addEventListener('resize', function() {
             if (window.innerWidth > 768) {
                 toggleMenu(false);
@@ -943,7 +950,6 @@
             }
         });
         
-        // ডেস্কটপ মেনুর লিংক ক্লিক
         document.querySelectorAll('.desktop-menu .nav-link').forEach(link => {
             link.addEventListener('click', function(e) {
                 e.preventDefault();
@@ -1012,6 +1018,9 @@
         loadProductUI('all');
         populateProductDropdown();
         updateDeliveryInfo();
+        
+        // প্রোডাক্ট হ্যাশ চেক করে অর্ডার ফর্ম সিলেক্ট করুন (ডিপ লিংক)
+        handleProductHash();
     }
     
     async function loadReviews() {
@@ -1162,7 +1171,7 @@
         const defaultSliders = [
             { 
                 slideNumber: 1, 
-                title: 'রয়েল ট্রাস্ট BD', 
+                title: 'রয়েল ট্রাস্ট BID', 
                 subtitle: 'প্রিমিয়াম পাঞ্জাবি', 
                 description: 'উচ্চমানের পাঞ্জাবি ও ফ্যাশনেবল পোশাক। রয়েল কোয়ালিটি, রয়েল ফিনিশিং।', 
                 imageUrl: 'https://images.unsplash.com/photo-1596755094514-f87e34085b2c?w=1600', 
@@ -1363,6 +1372,7 @@
                 fitness: 'ফিটনেস' 
             }[product.category] || product.category;
             
+            // ফিটনেস প্রোডাক্ট (ভ্যারিয়েন্ট ছাড়া)
             if (product.category === 'fitness' && product.hasVariants === false) {
                 return `<div class="product-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
                     <div class="relative">
@@ -1386,12 +1396,13 @@
                                 <p class="text-lg line-through text-gray-500">${product.regularPrice} টাকা</p>
                                 <p class="text-2xl font-bold text-red-700">${product.offerPrice} টাকা</p>
                             </div>
-                            <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full add-to-order" data-id="${product._id}">অর্ডার করুন</button>
+                            <a href="#product-${product._id}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full add-to-order" data-id="${product._id}" role="button">অর্ডার করুন</a>
                         </div>
                     </div>
                 </div>`;
             }
             
+            // সাধারণ প্রোডাক্ট (রঙ সহ)
             return `<div class="product-card bg-white rounded-xl shadow-lg overflow-hidden border border-gray-200">
                 <div class="relative">
                     <div class="h-48 bg-gray-100 overflow-hidden">
@@ -1428,12 +1439,13 @@
                             <p class="text-lg line-through text-gray-500">${product.regularPrice} টাকা</p>
                             <p class="text-2xl font-bold text-red-700">${product.offerPrice} টাকা</p>
                         </div>
-                        <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full add-to-order" data-id="${product._id}">অর্ডার করুন</button>
+                        <a href="#product-${product._id}" class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full add-to-order" data-id="${product._id}" role="button">অর্ডার করুন</a>
                     </div>
                 </div>
             </div>`;
         }).join('');
         
+        // রঙ সিলেক্টরের ইভেন্ট
         document.querySelectorAll('.color-option').forEach(el => {
             el.addEventListener('click', function() {
                 const pid = this.dataset.productId;
@@ -1493,15 +1505,7 @@
     }
     
     function setupUI() {
-        document.querySelectorAll('.add-to-order').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const id = this.dataset.id;
-                document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
-                document.getElementById('product-select').value = id;
-                document.getElementById('product-select').dispatchEvent(new Event('change', { bubbles: true }));
-            });
-        });
-        
+        // পরিমাণ বাড়ান/কমান
         document.getElementById('decrease-qty').addEventListener('click', () => {
             const q = document.getElementById('quantity');
             if (parseInt(q.value) > 1) q.value = parseInt(q.value) - 1;
@@ -1512,6 +1516,7 @@
             q.value = parseInt(q.value) + 1;
         });
         
+        // পণ্য সিলেক্ট করলে সাইজ আপডেট
         document.getElementById('product-select').addEventListener('change', function() {
             const pid = this.value;
             const product = products.find(p => p._id === pid);
@@ -1532,6 +1537,7 @@
             }
         });
         
+        // অর্ডার ফর্ম সাবমিট
         document.getElementById('order-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1597,6 +1603,7 @@
             }
         });
         
+        // রিভিউ ফর্ম সাবমিট
         document.getElementById('review-form').addEventListener('submit', async function(e) {
             e.preventDefault();
             
@@ -1636,16 +1643,22 @@
             }
         });
         
+        // গ্লোবাল ক্লিক হ্যান্ডলার - "অর্ডার করুন" লিংকের জন্য (ডিপ লিংক সাপোর্ট)
         document.addEventListener('click', function(e) {
             const btn = e.target.closest('.add-to-order');
             if (btn) {
+                e.preventDefault(); // href থেকে পেজ জাম্প বন্ধ
                 const id = btn.dataset.id;
+                // ইউআরএল হ্যাশ আপডেট করুন (প্রোডাক্ট ডিপ লিংক)
+                history.pushState(null, '', `#product-${id}`);
+                // অর্ডার সেকশনে স্ক্রল এবং প্রোডাক্ট সিলেক্ট করুন
                 document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
                 document.getElementById('product-select').value = id;
                 document.getElementById('product-select').dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
         
+        // রেটিং স্টার ইন্টারঅ্যাকশন
         const stars = document.querySelectorAll('#rating-stars i');
         stars.forEach(star => {
             star.addEventListener('mouseover', function() {
@@ -1669,6 +1682,7 @@
             });
         });
         
+        // মডাল বন্ধ
         document.getElementById('close-modal').addEventListener('click', () => {
             document.getElementById('order-success-modal').classList.add('hidden');
         });
@@ -1692,6 +1706,28 @@
                 loadProductUI(this.dataset.category);
             });
         });
+    }
+    
+    // ============================================
+    // ডিপ লিংক হ্যান্ডলার (URL হ্যাশ থেকে প্রোডাক্ট সিলেক্ট)
+    // ============================================
+    function handleProductHash() {
+        if (!window.location.hash) return;
+        const hash = window.location.hash.substring(1); // # সরান
+        if (hash.startsWith('product-')) {
+            const productId = hash.replace('product-', '');
+            const product = products.find(p => p._id === productId);
+            if (product) {
+                // অর্ডার ফর্মে প্রোডাক্ট সিলেক্ট করুন
+                const select = document.getElementById('product-select');
+                select.value = productId;
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+                // পণ্য সেকশনে একটু স্ক্রল করে দেখান
+                setTimeout(() => {
+                    document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            }
+        }
     }
     
     function getStarRating(rating) {
