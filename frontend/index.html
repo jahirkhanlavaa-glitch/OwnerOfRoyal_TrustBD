@@ -1039,7 +1039,7 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
     function handleHash() {
         const hash = window.location.hash.substring(1); // remove '#'
         if (!hash) {
-            // no hash, load all products
+            // no hash, load all products but stay at top
             loadProductUI('all');
             setActiveTab('all');
             return;
@@ -1061,9 +1061,10 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
                     document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
                 }, 300);
             } else {
-                // invalid product id, load all
+                // invalid product id, load all and scroll to products
                 loadProductUI('all');
                 setActiveTab('all');
+                document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
             }
         } else {
             // category hash
@@ -1071,10 +1072,13 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
             if (['all', 'panjabi', 'tshirt', 'three-piece', 'fitness'].includes(category)) {
                 loadProductUI(category);
                 setActiveTab(category);
+                // scroll to products section
+                document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
             } else {
-                // unknown hash, load all
+                // unknown hash, load all and scroll to products
                 loadProductUI('all');
                 setActiveTab('all');
+                document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
             }
         }
     }
@@ -1229,7 +1233,6 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
         }
         
         filteredProducts = products;
-        // আমরা handleHash() কল করব loadAllData তে, এখানে নয়
         populateProductDropdown();
         updateDeliveryInfo();
         injectProductStructuredData();
@@ -1951,6 +1954,9 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
                 // update URL hash
                 const hash = category === 'all' ? '#all' : `#${category}`;
                 history.pushState(null, '', hash);
+                
+                // scroll to products section
+                document.getElementById('products').scrollIntoView({ behavior: 'smooth' });
             });
         });
     }
