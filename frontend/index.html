@@ -469,6 +469,7 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
             padding: 12px 24px; font-size: 1.1rem; font-weight: 600;
             border-radius: 50px; transition: all 0.3s ease; cursor: pointer;
             background: white; border: 2px solid #e2e8f0; color: #4a5568;
+            text-decoration: none; display: inline-block;
         }
         .category-tab:hover { border-color: #dc2626; color: #dc2626; }
         .category-tab.active { background: #dc2626; color: white; border-color: #dc2626; }
@@ -801,12 +802,13 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
     <div class="container mx-auto px-4">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-8" id="products-heading">আমাদের কালেকশন</h2>
         
+        <!-- ক্যাটাগরি ট্যাবগুলোকে anchor বানানো হয়েছে এবং href যোগ করা হয়েছে -->
         <div class="flex flex-wrap justify-center gap-4 mb-12" role="tablist" aria-label="পণ্যের ক্যাটাগরি">
-            <button class="category-tab active" data-category="all" role="tab" aria-selected="true">সব পণ্য</button>
-            <button class="category-tab" data-category="panjabi" role="tab">পাঞ্জাবি</button>
-            <button class="category-tab" data-category="tshirt" role="tab">টি-শার্ট</button>
-            <button class="category-tab" data-category="three-piece" role="tab">থ্রি পিজ</button>
-            <button class="category-tab" data-category="fitness" role="tab">ইসপোর্স ফিটনেস</button>
+            <a href="#category-all" class="category-tab active" data-category="all" role="tab" aria-selected="true">সব পণ্য</a>
+            <a href="#category-panjabi" class="category-tab" data-category="panjabi" role="tab">পাঞ্জাবি</a>
+            <a href="#category-tshirt" class="category-tab" data-category="tshirt" role="tab">টি-শার্ট</a>
+            <a href="#category-three-piece" class="category-tab" data-category="three-piece" role="tab">থ্রি পিজ</a>
+            <a href="#category-fitness" class="category-tab" data-category="fitness" role="tab">ইসপোর্স ফিটনেস</a>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="product-container">
@@ -1024,11 +1026,18 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('current-year').textContent = new Date().getFullYear();
         
-        loadAllData();
+        loadAllData().then(() => {
+            // after all data loaded, check hash (for category or product)
+            checkInitialHash();
+        }).catch(error => {
+            console.error('Initial data load error:', error);
+            checkInitialHash(); // attempt anyway
+        });
+        
         setupUI();
-        setupCategoryTabs();
+        setupCategoryTabs(); // setup click handlers for category tabs
         setupMobileMenu();
-        injectProductStructuredData(); // প্রোডাক্টের জন্য JSON-LD ডায়নামিক
+        // injectProductStructuredData will be called inside loadProducts already
     });
     
     // ============================================
@@ -1122,7 +1131,7 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
     }
     
     // ============================================
-    // ডেটা লোড ফাংশন (অপরিবর্তিত, তবে alt ট্যাগ SEO এডেড)
+    // ডেটা লোড ফাংশন
     // ============================================
     
     async function loadAllData() {
@@ -1133,6 +1142,7 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
                 loadReviews(),
                 loadSliders()
             ]);
+            // checkInitialHash will be called after this in DOMContentLoaded
         } catch (error) {
             console.error('ডেটা লোড ত্রুটি:', error);
             showErrorMessages();
@@ -1677,6 +1687,52 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
         });
     }
     
+    // ============================================
+    // ক্যাটাগরি ট্যাবের ক্লিক হ্যান্ডলার (হ্যাশ আপডেট সহ)
+    // ============================================
+    function setupCategoryTabs() {
+        const tabs = document.querySelectorAll('.category-tab');
+        tabs.forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault(); // prevent page scroll to anchor
+                const category = this.dataset.category;
+                
+                // update active class
+                tabs.forEach(t => t.classList.remove('active'));
+                this.classList.add('active');
+                
+                // update URL hash without reload
+                history.pushState(null, '', `#category-${category}`);
+                
+                // load products for this category
+                loadProductUI(category);
+            });
+        });
+    }
+    
+    // ============================================
+    // হ্যাশ পরিবর্তন শোনা এবং ক্যাটাগরি/প্রোডাক্ট লোড করা
+    // ============================================
+    window.addEventListener('hashchange', function() {
+        checkInitialHash();
+    });
+    
+    function checkInitialHash() {
+        const hash = window.location.hash.substring(1); // remove #
+        if (hash.startsWith('category-')) {
+            const category = hash.replace('category-', '');
+            const tab = document.querySelector(`.category-tab[data-category="${category}"]`);
+            if (tab) {
+                // update active class
+                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
+                tab.classList.add('active');
+                loadProductUI(category);
+            }
+        } else if (hash.startsWith('product-')) {
+            handleProductHash(); // existing function for product details
+        }
+    }
+    
     function setupUI() {
         // পরিমাণ বাড়ান/কমান
         document.getElementById('decrease-qty').addEventListener('click', () => {
@@ -1859,16 +1915,6 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
         document.querySelectorAll('[id$="-modal"]').forEach(m => {
             m.addEventListener('click', function(e) {
                 if (e.target === this) this.classList.add('hidden');
-            });
-        });
-    }
-    
-    function setupCategoryTabs() {
-        document.querySelectorAll('.category-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                loadProductUI(this.dataset.category);
             });
         });
     }
