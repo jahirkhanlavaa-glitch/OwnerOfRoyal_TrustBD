@@ -2314,13 +2314,11 @@
                 display: flex !important;
             }
         }
-
-
         /* ============================================ */
-/* মোবাইলের জন্য মডাল ফিক্সেস */
+/* মোবাইলের জন্য মডাল ফিক্সেস - সম্পূর্ণ ফিটফাট */
 /* ============================================ */
 @media (max-width: 640px) {
-    /* মডালকে নিচ থেকে স্লাইড আপ করা */
+    /* মডালকে নিচ থেকে স্লাইড আপ */
     .modal {
         align-items: flex-end !important;
         padding: 0 !important;
@@ -2345,21 +2343,21 @@
         to { transform: translateY(0); }
     }
     
-    /* মডাল ওপেন থাকলে ব্যাকগ্রাউন্ড স্ক্রল বন্ধ */
+    /* মডাল ওপেন থাকলে ব্যাকগ্রাউন্ড স্ক্রল বন্ধ (JavaScript দরকার) */
     body.modal-open {
         overflow: hidden !important;
         position: fixed;
         width: 100%;
     }
     
-    /* ক্লোজ বাটন বড় ও ট্যাপ সহজ */
+    /* ক্লোজ বাটন বড় ও সহজে ট্যাপযোগ্য */
     .modal .border-b button {
         min-width: 44px !important;
         min-height: 44px !important;
         font-size: 24px !important;
     }
     
-    /* ফর্ম এলিমেন্টগুলো বড় ও সহজে ট্যাপযোগ্য */
+    /* ফর্ম এলিমেন্টগুলো বড় */
     .form-input,
     .form-textarea,
     .btn,
@@ -7216,9 +7214,6 @@
     window.markAsRead = markAsRead;
     window.markAllAsRead = markAllAsRead;
     window.hideAllNotifications = hideAllNotifications;
-
-
-    
 </script>
 
 </body>
