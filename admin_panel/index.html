@@ -2316,169 +2316,112 @@
         }
 
 
-        @media (max-width: 640px) {
-    /* আগের স্টাইলগুলো যেমন আছে */
+        /* ============================================ */
+/* মোবাইলের জন্য মডাল ফিক্সেস */
+/* ============================================ */
+@media (max-width: 640px) {
+    /* মডালকে নিচ থেকে স্লাইড আপ করা */
+    .modal {
+        align-items: flex-end !important;
+        padding: 0 !important;
+    }
     
-    /* ===== মডাল (পপ-আপ) রিফাইনমেন্ট ===== */
     .modal-content {
-        width: 92% !important;        /* একটু সরু, উভয় পাশে সমান মার্জিন */
-        margin: 16px auto !important;  /* সেন্টার করবে */
-        padding: 20px 18px !important;
-        max-height: 80vh !important;   /* স্ক্রিনের ৮০% */
-        border-radius: 28px !important; /* মসৃণ কোণ */
-        box-shadow: 0 20px 40px rgba(0,0,0,0.2) !important;
+        width: 100% !important;
+        max-height: 90vh !important;
+        margin: 0 !important;
+        border-radius: 20px 20px 0 0 !important;
+        position: fixed !important;
+        bottom: 0 !important;
+        left: 0 !important;
+        right: 0 !important;
+        top: auto !important;
+        transform: none !important;
+        animation: slideUp 0.3s ease !important;
     }
     
-    /* মডালের ভেতরের প্যাডিং */
-    .modal .p-6 {
-        padding: 18px 16px !important;
+    @keyframes slideUp {
+        from { transform: translateY(100%); }
+        to { transform: translateY(0); }
     }
     
-    /* মডাল হেডার */
-    .modal .border-b {
-        padding-bottom: 16px !important;
-        margin-bottom: 16px !important;
+    /* মডাল ওপেন থাকলে ব্যাকগ্রাউন্ড স্ক্রল বন্ধ */
+    body.modal-open {
+        overflow: hidden !important;
+        position: fixed;
+        width: 100%;
     }
     
-    /* ফর্ম এলিমেন্টগুলো টাচের জন্য বড় */
-    .modal .form-input,
-    .modal .form-textarea,
-    .modal .form-select,
-    .modal select,
-    .modal input[type="text"],
-    .modal input[type="number"],
-    .modal input[type="email"],
-    .modal input[type="password"],
-    .modal textarea {
-        font-size: 16px !important;    /* iOS zoom ঠেকাতে */
-        padding: 14px 16px !important;
-        border-radius: 14px !important;
+    /* ক্লোজ বাটন বড় ও ট্যাপ সহজ */
+    .modal .border-b button {
+        min-width: 44px !important;
+        min-height: 44px !important;
+        font-size: 24px !important;
     }
     
-    /* বাটনগুলো বড় এবং ট্যাপের জন্য সহজ */
-    .modal .btn {
-        min-height: 52px !important;
-        padding: 14px 22px !important;
+    /* ফর্ম এলিমেন্টগুলো বড় ও সহজে ট্যাপযোগ্য */
+    .form-input,
+    .form-textarea,
+    .btn,
+    select {
         font-size: 16px !important;
-        border-radius: 14px !important;
-        width: 100% !important;         /* মোবাইলে ফুল-উইডথ বাটন ভালো */
-        margin-bottom: 10px !important;
+        padding: 14px !important;
     }
     
-    /* দুটি বাটন পাশাপাশি থাকলে তাদের মাঝে ফাঁক */
-    .modal .flex.justify-end.space-x-4 {
+    /* রঙের তালিকা ও সাইজ চিপস মোড়ানো */
+    .color-list,
+    .size-chips {
+        flex-wrap: wrap !important;
+        gap: 8px !important;
+    }
+    
+    .color-item {
+        flex: 1 1 calc(50% - 8px) !important;
+        min-width: 120px !important;
+    }
+    
+    /* ইমেজ প্রিভিউ রেসপন্সিভ */
+    .color-image-preview {
+        max-width: 100% !important;
+        height: auto !important;
+        width: auto !important;
+    }
+    
+    /* ট্যাব বাটনগুলো রেসপন্সিভ */
+    .tabs {
+        flex-wrap: wrap !important;
+    }
+    
+    .tab-btn {
+        flex: 1 1 auto !important;
+        font-size: 14px !important;
+        padding: 12px 8px !important;
+        min-height: 44px !important;
+    }
+    
+    /* মডালের ফুটার বাটনগুলো স্ট্যাক করুন */
+    .flex.justify-end.space-x-4 {
         flex-direction: column !important;
         gap: 12px !important;
     }
-    .modal .flex.justify-end.space-x-4 .btn {
-        margin-left: 0 !important;
+    
+    .flex.justify-end.space-x-4 .btn {
         width: 100% !important;
+        margin-left: 0 !important;
     }
     
-    /* ট্যাব স্টাইল */
-    .modal .tabs {
-        flex-wrap: wrap !important;
-        gap: 6px !important;
-    }
-    .modal .tab-btn {
-        flex: 1 1 calc(50% - 6px) !important;
-        padding: 12px 6px !important;
-        font-size: 14px !important;
-        min-height: 48px !important;
-        white-space: nowrap !important;
+    /* কালার আপলোড এলাকা ছোট পর্দায় সামঞ্জস্য */
+    .color-image-upload {
+        padding: 12px !important;
     }
     
-    /* ইমেজ আপলোড এলাকা */
-    .modal .image-upload-area {
-        padding: 24px 12px !important;
-    }
-    .modal .image-upload-area i {
-        font-size: 32px !important;
-    }
-    .modal .image-upload-area p {
-        font-size: 14px !important;
-    }
-    
-    /* কালার আইটেম */
-    .modal .color-image-upload {
-        padding: 18px !important;
-    }
-    .modal .color-image-preview {
-        width: 70px !important;
-        height: 70px !important;
-    }
-    
-    /* মডালের ভেতরের গ্রিড */
-    .modal .grid-cols-1.md\:grid-cols-2,
-    .modal .grid-cols-1.md\:grid-cols-3 {
-        grid-template-columns: 1fr !important;
-        gap: 16px !important;
-    }
-    
-    /* অর্ডার ডিটেইলস মডাল */
-    #order-details .grid {
-        gap: 16px !important;
-    }
-    #order-details .bg-gray-50 {
-        padding: 18px !important;
-        border-radius: 18px !important;
-    }
-    #order-details p {
-        font-size: 15px !important;
-        margin-bottom: 8px !important;
-    }
-    
-    /* কুপন মডাল */
-    #coupon-modal .grid {
-        gap: 16px !important;
-    }
-    
-    /* ===== নোটিফিকেশন ড্রপডাউন ===== */
-    .notification-dropdown {
-        position: fixed !important;
-        top: 70px !important;           /* মোবাইল হেডারের নিচে */
-        left: 16px !important;
-        right: 16px !important;
-        width: auto !important;
-        max-width: none !important;
-        max-height: 70vh !important;
-        border-radius: 24px !important;
-        box-shadow: 0 20px 40px rgba(0,0,0,0.2) !important;
-        z-index: 1001 !important;
-    }
-    
-    .notification-item {
-        padding: 16px 18px !important;
-    }
-    .notification-item .flex-1 p {
-        font-size: 15px !important;
-        line-height: 1.4 !important;
-    }
-    .notification-item .text-xs {
-        font-size: 12px !important;
-    }
-    .notification-dropdown .p-4 {
+    /* মডালের শিরোনাম মার্জিন ঠিক করা */
+    .modal .p-6.border-b {
         padding: 16px !important;
     }
     
-    /* নোটিফিকেশন কাউন্ট ব্যাজ */
-    #mobile-notification-count {
-        width: 22px !important;
-        height: 22px !important;
-        font-size: 12px !important;
-        top: -4px !important;
-        right: -4px !important;
-    }
-    
-    /* ===== অন্যান্য এলিমেন্ট যা পপ-আপের সাথে সম্পর্কিত ===== */
-    .color-option-preview {
-        width: 36px !important;
-        height: 36px !important;
-    }
-    
-    /* ছোট স্ক্রিনে ফন্ট আরও বড় */
-    .modal h3.text-xl {
-        font-size: 22px !important;
+    .modal .p-6.border-b h3 {
+        font-size: 18px !important;
     }
 }
     </style>   
@@ -7273,6 +7216,32 @@
     window.markAsRead = markAsRead;
     window.markAllAsRead = markAllAsRead;
     window.hideAllNotifications = hideAllNotifications;
+
+
+    // ব্যাকগ্রাউন্ড স্ক্রল কন্ট্রোল
+function disableBodyScroll() {
+    document.body.classList.add('modal-open');
+}
+
+function enableBodyScroll() {
+    document.body.classList.remove('modal-open');
+}
+
+// মডাল ওপেন করার ফাংশনগুলোতে disableBodyScroll() কল করুন
+// উদাহরণ: showAddProductModal, editProduct, viewOrder ইত্যাদি
+function showAddProductModal() {
+    // আপনার বিদ্যমান কোড
+    disableBodyScroll();
+    document.getElementById('product-modal').classList.add('active');
+}
+
+// মডাল বন্ধ করার সময় enableBodyScroll() কল করুন
+function hideProductModal() {
+    enableBodyScroll();
+    document.getElementById('product-modal').classList.remove('active');
+}
+
+// একইভাবে hideCategoryModal, hideSliderModal, hideOrderModal, hideCouponModal ফাংশনেও enableBodyScroll() যোগ করুন।
 </script>
 
 </body>
