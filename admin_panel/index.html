@@ -7218,30 +7218,7 @@
     window.hideAllNotifications = hideAllNotifications;
 
 
-    // ব্যাকগ্রাউন্ড স্ক্রল কন্ট্রোল
-function disableBodyScroll() {
-    document.body.classList.add('modal-open');
-}
-
-function enableBodyScroll() {
-    document.body.classList.remove('modal-open');
-}
-
-// মডাল ওপেন করার ফাংশনগুলোতে disableBodyScroll() কল করুন
-// উদাহরণ: showAddProductModal, editProduct, viewOrder ইত্যাদি
-function showAddProductModal() {
-    // আপনার বিদ্যমান কোড
-    disableBodyScroll();
-    document.getElementById('product-modal').classList.add('active');
-}
-
-// মডাল বন্ধ করার সময় enableBodyScroll() কল করুন
-function hideProductModal() {
-    enableBodyScroll();
-    document.getElementById('product-modal').classList.remove('active');
-}
-
-// একইভাবে hideCategoryModal, hideSliderModal, hideOrderModal, hideCouponModal ফাংশনেও enableBodyScroll() যোগ করুন।
+    
 </script>
 
 </body>
