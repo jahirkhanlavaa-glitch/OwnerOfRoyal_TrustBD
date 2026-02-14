@@ -95,7 +95,6 @@
     }
     </script>
 
-
     <!-- Meta Pixel Code -->
 <script>
 !function(f,b,e,v,n,t,s)
@@ -802,13 +801,13 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
     <div class="container mx-auto px-4">
         <h2 class="text-4xl font-bold text-center text-gray-800 mb-8" id="products-heading">আমাদের কালেকশন</h2>
         
-        <!-- ক্যাটাগরি ট্যাবগুলোকে anchor বানানো হয়েছে এবং href যোগ করা হয়েছে -->
+        <!-- ক্যাটাগরি ট্যাব (এখন লিংক হিসেবে) -->
         <div class="flex flex-wrap justify-center gap-4 mb-12" role="tablist" aria-label="পণ্যের ক্যাটাগরি">
-            <a href="#category-all" class="category-tab active" data-category="all" role="tab" aria-selected="true">সব পণ্য</a>
-            <a href="#category-panjabi" class="category-tab" data-category="panjabi" role="tab">পাঞ্জাবি</a>
-            <a href="#category-tshirt" class="category-tab" data-category="tshirt" role="tab">টি-শার্ট</a>
-            <a href="#category-three-piece" class="category-tab" data-category="three-piece" role="tab">থ্রি পিজ</a>
-            <a href="#category-fitness" class="category-tab" data-category="fitness" role="tab">ইসপোর্স ফিটনেস</a>
+            <a href="#all" class="category-tab active" data-category="all" role="tab" aria-selected="true">সব পণ্য</a>
+            <a href="#panjabi" class="category-tab" data-category="panjabi" role="tab" aria-selected="false">পাঞ্জাবি</a>
+            <a href="#tshirt" class="category-tab" data-category="tshirt" role="tab" aria-selected="false">টি-শার্ট</a>
+            <a href="#three-piece" class="category-tab" data-category="three-piece" role="tab" aria-selected="false">থ্রি পিজ</a>
+            <a href="#fitness" class="category-tab" data-category="fitness" role="tab" aria-selected="false">ইসপোর্স ফিটনেস</a>
         </div>
         
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="product-container">
@@ -1026,19 +1025,70 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
     document.addEventListener('DOMContentLoaded', function() {
         document.getElementById('current-year').textContent = new Date().getFullYear();
         
-        loadAllData().then(() => {
-            // after all data loaded, check hash (for category or product)
-            checkInitialHash();
-        }).catch(error => {
-            console.error('Initial data load error:', error);
-            checkInitialHash(); // attempt anyway
-        });
-        
+        loadAllData();
         setupUI();
-        setupCategoryTabs(); // setup click handlers for category tabs
+        setupCategoryTabs();
         setupMobileMenu();
-        // injectProductStructuredData will be called inside loadProducts already
+        // হ্যাশ চেঞ্জ ইভেন্ট লিসেনার
+        window.addEventListener('hashchange', handleHash);
     });
+    
+    // ============================================
+    // হ্যাশ হ্যান্ডলার (ক্যাটাগরি / প্রোডাক্ট)
+    // ============================================
+    function handleHash() {
+        const hash = window.location.hash.substring(1); // remove '#'
+        if (!hash) {
+            // no hash, load all products
+            loadProductUI('all');
+            setActiveTab('all');
+            return;
+        }
+        
+        if (hash.startsWith('product-')) {
+            const productId = hash.replace('product-', '');
+            const product = products.find(p => p._id === productId);
+            if (product) {
+                // load category products and set active tab
+                loadProductUI(product.category);
+                setActiveTab(product.category);
+                // pre-select in order form
+                const select = document.getElementById('product-select');
+                select.value = productId;
+                select.dispatchEvent(new Event('change', { bubbles: true }));
+                // scroll to order section
+                setTimeout(() => {
+                    document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+                }, 300);
+            } else {
+                // invalid product id, load all
+                loadProductUI('all');
+                setActiveTab('all');
+            }
+        } else {
+            // category hash
+            const category = hash; // 'all', 'panjabi', 'tshirt', 'three-piece', 'fitness'
+            if (['all', 'panjabi', 'tshirt', 'three-piece', 'fitness'].includes(category)) {
+                loadProductUI(category);
+                setActiveTab(category);
+            } else {
+                // unknown hash, load all
+                loadProductUI('all');
+                setActiveTab('all');
+            }
+        }
+    }
+    
+    // ============================================
+    // অ্যাক্টিভ ট্যাব সেট করা
+    // ============================================
+    function setActiveTab(category) {
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            const isActive = tab.dataset.category === category;
+            tab.classList.toggle('active', isActive);
+            tab.setAttribute('aria-selected', isActive ? 'true' : 'false');
+        });
+    }
     
     // ============================================
     // মোবাইল মেনু ফাংশন
@@ -1142,7 +1192,8 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
                 loadReviews(),
                 loadSliders()
             ]);
-            // checkInitialHash will be called after this in DOMContentLoaded
+            // ডেটা লোড শেষে হ্যাশ অনুযায়ী UI সেট করুন
+            handleHash();
         } catch (error) {
             console.error('ডেটা লোড ত্রুটি:', error);
             showErrorMessages();
@@ -1178,11 +1229,10 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
         }
         
         filteredProducts = products;
-        loadProductUI('all');
+        // আমরা handleHash() কল করব loadAllData তে, এখানে নয়
         populateProductDropdown();
         updateDeliveryInfo();
-        handleProductHash();
-        injectProductStructuredData(); // পণ্য লোডের পর JSON-LD
+        injectProductStructuredData();
     }
     
     async function loadReviews() {
@@ -1223,7 +1273,7 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
     }
     
     // ============================================
-    // ডেমো ডেটা (সামান্য পরিবর্তন: alt টেক্সটের জন্য নাম)
+    // ডেমো ডেটা
     // ============================================
     
     function getDemoProducts() {
@@ -1273,7 +1323,7 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
     }
     
     // ============================================
-    // UI আপডেট ফাংশন (SEO: alt যোগ করা হয়েছে)
+    // UI আপডেট ফাংশন
     // ============================================
     
     function loadSlidersUI(sliders) {
@@ -1511,7 +1561,6 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
         `;
     }
     
-    // SEO: ইমেজ ALT আপডেট ফাংশন প্রোডাক্ট কার্ডের মধ্যে
     function loadProductUI(category = 'all') {
         const container = document.getElementById('product-container');
         
@@ -1628,7 +1677,7 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
                 const img = document.getElementById(`image-${pid}`);
                 if (img) {
                     img.src = this.dataset.image;
-                    img.alt = `${product.name} - ${this.dataset.colorName} - রয়েল ট্রাস্ট বিআইডি`;
+                    img.alt = `${products.find(p => p._id === pid)?.name} - ${this.dataset.colorName} - রয়েল ট্রাস্ট বিআইডি`;
                 }
                 
                 const sel = document.getElementById(`selected-color-${pid}`);
@@ -1685,52 +1734,6 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
             option.textContent = `${cat} - ${p.name} - ${p.offerPrice} টাকা`;
             select.appendChild(option);
         });
-    }
-    
-    // ============================================
-    // ক্যাটাগরি ট্যাবের ক্লিক হ্যান্ডলার (হ্যাশ আপডেট সহ)
-    // ============================================
-    function setupCategoryTabs() {
-        const tabs = document.querySelectorAll('.category-tab');
-        tabs.forEach(tab => {
-            tab.addEventListener('click', function(e) {
-                e.preventDefault(); // prevent page scroll to anchor
-                const category = this.dataset.category;
-                
-                // update active class
-                tabs.forEach(t => t.classList.remove('active'));
-                this.classList.add('active');
-                
-                // update URL hash without reload
-                history.pushState(null, '', `#category-${category}`);
-                
-                // load products for this category
-                loadProductUI(category);
-            });
-        });
-    }
-    
-    // ============================================
-    // হ্যাশ পরিবর্তন শোনা এবং ক্যাটাগরি/প্রোডাক্ট লোড করা
-    // ============================================
-    window.addEventListener('hashchange', function() {
-        checkInitialHash();
-    });
-    
-    function checkInitialHash() {
-        const hash = window.location.hash.substring(1); // remove #
-        if (hash.startsWith('category-')) {
-            const category = hash.replace('category-', '');
-            const tab = document.querySelector(`.category-tab[data-category="${category}"]`);
-            if (tab) {
-                // update active class
-                document.querySelectorAll('.category-tab').forEach(t => t.classList.remove('active'));
-                tab.classList.add('active');
-                loadProductUI(category);
-            }
-        } else if (hash.startsWith('product-')) {
-            handleProductHash(); // existing function for product details
-        }
     }
     
     function setupUI() {
@@ -1873,11 +1876,20 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
             if (btn) {
                 e.preventDefault();
                 const id = btn.dataset.id;
-                history.pushState(null, '', `#product-${id}`);
-                document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
-                const select = document.getElementById('product-select');
-                select.value = id;
-                select.dispatchEvent(new Event('change', { bubbles: true }));
+                const product = products.find(p => p._id === id);
+                if (product) {
+                    // load category products and set active tab
+                    loadProductUI(product.category);
+                    setActiveTab(product.category);
+                    // update hash
+                    history.pushState(null, '', `#product-${id}`);
+                    // scroll to order section
+                    document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
+                    // pre-select product in form
+                    const select = document.getElementById('product-select');
+                    select.value = id;
+                    select.dispatchEvent(new Event('change', { bubbles: true }));
+                }
             }
         });
         
@@ -1919,21 +1931,28 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
         });
     }
     
-    function handleProductHash() {
-        if (!window.location.hash) return;
-        const hash = window.location.hash.substring(1);
-        if (hash.startsWith('product-')) {
-            const productId = hash.replace('product-', '');
-            const product = products.find(p => p._id === productId);
-            if (product) {
-                const select = document.getElementById('product-select');
-                select.value = productId;
-                select.dispatchEvent(new Event('change', { bubbles: true }));
-                setTimeout(() => {
-                    document.getElementById('order').scrollIntoView({ behavior: 'smooth' });
-                }, 300);
-            }
-        }
+    function setupCategoryTabs() {
+        document.querySelectorAll('.category-tab').forEach(tab => {
+            tab.addEventListener('click', function(e) {
+                e.preventDefault(); // prevent default anchor jump
+                const category = this.dataset.category;
+                
+                // update active states
+                document.querySelectorAll('.category-tab').forEach(t => {
+                    t.classList.remove('active');
+                    t.setAttribute('aria-selected', 'false');
+                });
+                this.classList.add('active');
+                this.setAttribute('aria-selected', 'true');
+                
+                // load products for category
+                loadProductUI(category);
+                
+                // update URL hash
+                const hash = category === 'all' ? '#all' : `#${category}`;
+                history.pushState(null, '', hash);
+            });
+        });
     }
     
     function getStarRating(rating) {
@@ -1974,7 +1993,6 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
     // ডায়নামিক স্ট্রাকচারড ডেটা (JSON-LD) পণ্যের জন্য
     // ============================================
     function injectProductStructuredData() {
-        // শুধুমাত্র যদি প্রোডাক্ট লোড হয় এবং কমপক্ষে ১টি একটিভ প্রোডাক্ট থাকে
         if (!products || products.length === 0) return;
         
         const activeProducts = products.filter(p => p.isActive);
@@ -2003,12 +2021,10 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
             };
         });
         
-        // স্ক্রিপ্ট ট্যাগে প্রোডাক্ট অ্যারে যুক্ত করুন (প্রথমটি দেখাবে, গুগল একাধিক নিতে পারে)
         const script = document.createElement('script');
         script.type = 'application/ld+json';
         script.id = 'structured-data-products';
         
-        // যদি একাধিক প্রোডাক্ট, তবে ItemList স্কিমা ব্যবহার করুন
         if (productSchemas.length > 1) {
             const itemList = {
                 "@context": "https://schema.org",
@@ -2024,7 +2040,6 @@ src="https://www.facebook.com/tr?id=3399807060169536&ev=PageView&noscript=1"
             script.textContent = JSON.stringify(productSchemas[0], null, 2);
         }
         
-        // আগের product schema রিমুভ করে নতুন যোগ করুন
         const oldScript = document.getElementById('structured-data-products');
         if (oldScript) oldScript.remove();
         
